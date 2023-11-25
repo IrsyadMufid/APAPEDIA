@@ -42,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
                 seller.setEmail(createUserDTO.getEmail());
                 seller.setAddress(createUserDTO.getAddress());
                 seller.setRole(RoleEnum.Seller);
+                seller.setCategory(createUserDTO.getCategory());
                 sellerDb.save(seller);
                 return seller;
             } else if (createUserDTO.getRole().equals("Customer")) {

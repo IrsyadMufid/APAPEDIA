@@ -15,6 +15,6 @@ import lombok.Setter;
 @Entity
 @Table(name="seller")
 public class Seller extends UserModel {
-    @Column(name="category")
+    @Column(name="category", nullable=false)
     private String category;
 }

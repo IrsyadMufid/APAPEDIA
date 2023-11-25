@@ -106,7 +106,7 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance cannot be zero");
             } else {
                 userService.addBalanceUser(id, balance);
-                String responseMessage = String.format("Changed %d to %s --> total: %d", balance, user.getUsername(),
+                String responseMessage = String.format("Added %d to %s --> current balance: %d", balance, user.getUsername(),
                         user.getBalance());
                 return ResponseEntity.ok(responseMessage);
             }
@@ -123,7 +123,7 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance is zero or negative");
             } else {
                 userService.subtractBalanceUser(id, balance);
-                String responseMessage = String.format("Changed %d to %s --> total: %d", balance, user.getUsername(),
+                String responseMessage = String.format("Subtracted %d to %s --> current balance: %d", balance, user.getUsername(),
                         user.getBalance());
                 return ResponseEntity.ok(responseMessage);
             }

@@ -136,5 +136,4 @@ public class SellerController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User " + id + " not found");
         }
     }
-
 }

@@ -4,15 +4,24 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
+import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDb userDb;
+
+    @Autowired
+    private SellerDb sellerDb;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserModel> findAllUser() {
@@ -24,6 +33,16 @@ public class UserServiceImpl implements UserService {
         for (UserModel user : userDb.findAll()) {
             if (user.getId().equals(id)) {
                 return user;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Seller findSellerById(UUID id) {
+        for (Seller seller : sellerDb.findAll()) {
+            if (seller.getId().equals(id)) {
+                return (Seller) seller;
             }
         }
         return null;
@@ -55,8 +74,16 @@ public class UserServiceImpl implements UserService {
         user.setName(name);
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setAddress(address);
         userDb.save(user);
+    }
+
+    @Override
+    public Seller addCategory(String id, String category) {
+        Seller seller = (Seller) findUserById(UUID.fromString(id));
+        seller.setCategory(category);
+        userDb.save(seller);
+        return seller;
     }
 }

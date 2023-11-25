@@ -42,7 +42,7 @@ public class UserApplication {
 			newUser1.setPassword(passwordEncoder.encode("secret100"));
 			newUser1.setAddress("Gedung Lama");
 			newUser1.setRole(RoleEnum.Seller);
-			newUser1.setCategory("Makanan");
+			newUser1.setCategory("Official Store");
 
 			Customer newUser2 = new Customer();
 			newUser2.setName("Angel");

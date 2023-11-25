@@ -1,5 +1,7 @@
 package com.apapedia.user.dto.request;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,4 +32,8 @@ public class CreateUserRequestDTO {
 
     @NotBlank
     private String role;
+
+    private UUID cartId;
+
+    private String category;
 }
