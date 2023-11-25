@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -136,4 +137,39 @@ public class CustomerController {
                     HttpStatus.NOT_FOUND, "Id User " + id + " not found");
         }
     }
+
+    @PutMapping(value = "/{id}/add-cart/{cartId}")
+    public ResponseEntity<String> addCart(@PathVariable("id") String id, @PathVariable("cartId") String cartId) {
+        try {
+            var user = userService.findCustomerById(UUID.fromString(id));
+            if (user.getRole().equals(RoleEnum.Customer)) {
+                user.setCartId(UUID.fromString(cartId));
+                return ResponseEntity.ok("Cart has been added");
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a customer");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
+
+    @DeleteMapping(value = "/{id}/delete-cart")
+    public ResponseEntity<String> deleteCart(@PathVariable("id") String id) {
+        try {
+            var user = userService.findCustomerById(UUID.fromString(id));
+            if (user.getRole().equals(RoleEnum.Customer)) {
+                user.setCartId(null);
+                return ResponseEntity.ok("Cart has been deleted");
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a customer");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
+
 }

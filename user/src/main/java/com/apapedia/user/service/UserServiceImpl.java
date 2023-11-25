@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
-import com.apapedia.user.repository.SellerDb;
+import com.apapedia.user.repository.CustomerDb;
 import com.apapedia.user.repository.UserDb;
 
 @Service
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private UserDb userDb;
 
     @Autowired
-    private SellerDb sellerDb;
+    private CustomerDb customerDb;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -39,10 +40,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Seller findSellerById(UUID id) {
-        for (Seller seller : sellerDb.findAll()) {
-            if (seller.getId().equals(id)) {
-                return (Seller) seller;
+    public Customer findCustomerById(UUID id) {
+        for (Customer customer : customerDb.findAll()) {
+            if (customer.getId().equals(id)) {
+                return customer;
             }
         }
         return null;

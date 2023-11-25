@@ -3,6 +3,7 @@ package com.apapedia.user.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
 
@@ -12,7 +13,7 @@ public interface UserService {
 
     UserModel findUserById(UUID id);
 
-    public Seller findSellerById(UUID id);
+    public Customer findCustomerById(UUID id);
 
     void deleteUser(UserModel userToDelete);
 
