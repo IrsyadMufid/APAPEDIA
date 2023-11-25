@@ -15,7 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Customer extends User {
-    @Column(name="cart_id", nullable=false)
+@Table(name="customer")
+public class Customer extends UserModel {
+    @Column(name="cart_id")
     private UUID cartId;
 }

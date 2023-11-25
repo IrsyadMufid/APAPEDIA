@@ -22,8 +22,8 @@ import com.apapedia.user.service.AuthService;
 import com.apapedia.user.service.UserService;
 
 @RestController
-@RequestMapping("/api/seller")
-public class SellerController {
+@RequestMapping("/api/customer")
+public class CustomerController {
     
     @Autowired
     AuthenticationManager authenticationManager;
@@ -41,53 +41,15 @@ public class SellerController {
     private UserModel getUserById(@PathVariable("id") String id) {
         try {
             UserModel user = userService.findUserById(UUID.fromString(id));
-            if (user.getRole().equals(RoleEnum.Seller)) {
+            if (user.getRole().equals(RoleEnum.Customer)) {
                 return user;
             } else {
                 throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "You must be seller to get info for " + id + "!");
+                        HttpStatus.NOT_FOUND, "You must be customer to get info for " + id + "!");
             }
         } catch (NoSuchElementException | IllegalArgumentException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id Seller " + id + " not found");
-        }
-    }
-
-    @PutMapping(value = "/{id}/edit-user")
-    public ResponseEntity<String> editUser(@PathVariable("id") String id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "username", required = false) String username,
-            @RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "address", required = false) String address) {
-        try {
-            var user = userService.findUserById(UUID.fromString(id));
-            if (user.getRole().equals(RoleEnum.Seller)) {
-                if (user.getPassword().equals(password)) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password cannot be the same");
-                }
-                else {
-                    if (name == null) {
-                        name = user.getName();
-                    }
-                    if (username == null) {
-                        username = user.getUsername();
-                    }
-                    if (email == null) {
-                        email = user.getEmail();
-                    }
-                    if (password == null) {
-                        password = user.getPassword();
-                    }
-                    if (address == null) {
-                        address = user.getAddress();
-                    }
-                    userService.editUser(user, name, username, email, password, address);
-                }
-                return ResponseEntity.ok("User has been edited");
-            }
-            else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a seller");
-            }
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, "Id Customer " + id + " not found");
         }
     }
 
@@ -137,4 +99,41 @@ public class SellerController {
         }
     }
 
+    @PutMapping(value = "/{id}/edit-user")
+    public ResponseEntity<String> editUser(@PathVariable("id") String id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "address", required = false) String address) {
+        try {
+            var user = userService.findUserById(UUID.fromString(id));
+            if (user.getRole().equals(RoleEnum.Seller)) {
+                if (user.getPassword().equals(password)) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password cannot be the same");
+                }
+                else {
+                    if (name == null) {
+                        name = user.getName();
+                    }
+                    if (username == null) {
+                        username = user.getUsername();
+                    }
+                    if (email == null) {
+                        email = user.getEmail();
+                    }
+                    if (password == null) {
+                        password = user.getPassword();
+                    }
+                    if (address == null) {
+                        address = user.getAddress();
+                    }
+                    userService.editUser(user, name, username, email, password, address);
+                }
+                return ResponseEntity.ok("User has been edited");
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a seller");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
 }
