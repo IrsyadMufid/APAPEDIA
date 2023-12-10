@@ -18,8 +18,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    
-
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable String id, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();

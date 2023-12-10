@@ -31,8 +31,8 @@
               Profile
             </a>
             <div class="dropdown-menu" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" th:href="@{/profile/withdraw}">Withdraw Balance</a>
-              <a class="dropdown-item" th:href="@{/profile/edit}">Edit Profile</a>
+              <a class="dropdown-item" th:if="${activeUser != null}" th:href="@{user/profile/withdraw/{id}(id=${activeUser.id})}">Withdraw Balance</a>
+              <a class="dropdown-item" th:if="${activeUser != null}" th:href="@{user/profile/edit/{id}(id=${activeUser.id})}">Edit Profile</a>
             </div>
           </div>
         </li>

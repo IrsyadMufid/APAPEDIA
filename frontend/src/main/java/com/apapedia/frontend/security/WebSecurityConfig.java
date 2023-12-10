@@ -33,7 +33,7 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/validate-ticket")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/logout-sso")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/catalog/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/all")).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form

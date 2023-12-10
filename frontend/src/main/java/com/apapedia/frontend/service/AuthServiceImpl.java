@@ -58,9 +58,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ReadUserResponseDTO getActiveUser(String token) {
+        var body = new JwtResponseDTO(token);
+        
         var response = this.webClient
-                .get()
+                .post()
                 .uri("/api/auth/get-user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .bodyToMono(ReadUserResponseDTO.class)
