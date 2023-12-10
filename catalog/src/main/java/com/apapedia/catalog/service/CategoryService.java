@@ -1,9 +1,15 @@
 package com.apapedia.catalog.service;
 
 import com.apapedia.catalog.model.Category;
-import java.util.UUID;
 
+import jakarta.transaction.Transactional;
+
+import java.util.List;
+
+@Transactional
 public interface CategoryService {
     Category addCategory(Category category);
-    // Other service methods can be defined here as needed.
+    List<Category> getAllCategories();
+    Category getCategoryById(Long id);
+    public Category getOrCreateCategoryByName(String categoryName);
 }

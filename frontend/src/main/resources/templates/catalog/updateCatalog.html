@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Include Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <!-- Include your CSS file here if needed -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+        <title>Update Catalog</title>
+    </head>
+<body>
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <div class="container mt-5">
+        <h2>Update Catalog</h2>
+        <form id="updateCatalogForm" action="#" th:action="@{'/catalog/' + ${updateCatalogResponseDTO.id}}" method="post" enctype="multipart/form-data">
+            <input name="_method" type="hidden" value="PUT" />
+            <input type="hidden" name="id" th:value="${updateCatalogResponseDTO.id}" />
+            
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" name="productName" th:value="${updateCatalogResponseDTO.productName}" class="form-control" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" name="price" th:value="${updateCatalogResponseDTO.price}" class="form-control" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="productDescription">Product Description:</label>
+                <textarea name="productDescription" class="form-control" th:text="${updateCatalogResponseDTO.productDescription}"></textarea>
+            </div>
+    
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" name="stock" th:value="${updateCatalogResponseDTO.stock}" class="form-control" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select name="categoryId" class="form-control" required>
+                    <!-- Populate dropdown with categories -->
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+            </div>
+    
+            <div class="form-group">
+                <label for="image">Current Image:</label>
+                <!-- Display the current image -->
+                <img th:src="'data:image/jpeg;base64,' + ${updateCatalogResponseDTO.imageBase64}" class="img-thumbnail" alt="Current Image">
+                <label for="image">New Image:</label>
+                <input type="file" name="file" accept=".jpg, .jpeg, .png" class="form-control-file">
+            </div>
+    
+            <button type="button" onclick="submitForm()" class="btn btn-primary">Update Product</button>
+        </form>
+    </div>
+    
+    <div class="modal fade" id="updateResultModal" tabindex="-1" role="dialog" aria-labelledby="updateResultModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateResultModalLabel">Update Result</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Update result message will be displayed here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="goToHome()">Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Include Bootstrap JS and Popper.js -->
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function submitForm() {
+        try {
+            var form = $('#updateCatalogForm')[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response, status, xhr) {
+                console.log('Response Status:', status);
+                console.log('Response Headers:', xhr.getAllResponseHeaders());
+                console.log('Response Text:', xhr.responseText);
+
+                if (xhr.status === 200) {
+                    // Display response in the modal
+                    $('#updateResultModal .modal-body').html(response);
+
+                    // Show Bootstrap modal
+                    $('#updateResultModal').modal('show');
+                } else {
+                    // Handle unexpected response format
+                    showAlert('danger', 'Unexpected response format');
+                }
+            },
+
+                error: function(xhr, status, error) {
+                    console.error('XHR Status:', status);
+                    console.error('XHR Error:', error);
+                    console.log('Response Text:', xhr.responseText);
+
+                    var errorMessage = JSON.parse(xhr.responseText);
+
+                    // Handle validation errors (if any)
+                    if (errorMessage.errors) {
+                        // Remove previous error messages (if any)
+                        $('.alert-danger').remove();
+
+                        // Display error messages next to the corresponding form fields
+                        $.each(errorMessage.errors, function(key, value) {
+                            $('#' + key).after('<div class="alert alert-danger">' + value + '</div>');
+                        });
+                    } else {
+                        // Display error in the modal
+                        $('#updateResultModal .modal-body').html('Error processing the request');
+
+                        // Show Bootstrap modal
+                        $('#updateResultModal').modal('show');
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function showAlert(type, message) {
+        var alertDiv = $('<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span></button>' + message + '</div>');
+
+        // Append the alert to the container
+        $('.container').append(alertDiv);
+
+        // Automatically close the alert after 5 seconds
+        setTimeout(function() {
+            // Remove the alert from the DOM
+            alertDiv.alert('close');
+        }, 5000);
+    }
+
+    function goToHome() {
+    // Redirect to the home page or perform any other action you want
+    window.location.href = window.location.origin + "/catalog/all";  // Change the URL accordingly
+}
+
+    /*]]>*/
+</script>
+
+        
+</body>
+</html>

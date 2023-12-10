@@ -2,10 +2,8 @@ package com.apapedia.user.security;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -22,13 +20,12 @@ public class JwtGenerator {
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     // Generate token
-    public String generateToken(Authentication authentication, UUID id, String role) {
-        String username = authentication.getName();
+    public String generateToken(String username, String role) {
         Date currentDate = new Date();
         // Expires in 5 hours
         Date expiredDate = new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000);
         // Generate token
-        String token = Jwts.builder().setSubject(username).claim("id", id).claim("role", role).setIssuedAt(currentDate)
+        String token = Jwts.builder().setSubject(username).claim("role", role).setIssuedAt(currentDate)
                 .setExpiration(expiredDate)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
         return token;
@@ -40,7 +37,17 @@ public class JwtGenerator {
         return claim.getSubject();
     }
 
-    // Get id from token
+    public String getIdFromJWT(String token) {
+        Claims claim = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return claim.get("id", String.class);
+    }
+
+    public String getRoleFromJWT(String token) {
+        Claims claim = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return claim.get("role", String.class);
+    }
+
+    // Validate token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);

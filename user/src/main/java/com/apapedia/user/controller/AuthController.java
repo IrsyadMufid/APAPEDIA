@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.request.AuthRequestDTO;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
+import com.apapedia.user.dto.request.SSOLoginRequestDTO;
 import com.apapedia.user.dto.response.JwtResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
@@ -52,34 +53,39 @@ public class AuthController {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
-            var user = authService.Register(userDTO);
+            var user = authService.register(userDTO);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
 
     @PostMapping(value = "/log-in")
-    public ResponseEntity<JwtResponseDTO> Authenticate(@Valid @RequestBody AuthRequestDTO authDTO, BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
-            String username;
-            UserModel user;
-            if (authDTO.getUsername().contains("@")) {
-                user = userDb.findByEmail(authDTO.getUsername());
-                username = user.getUsername();
-            } else {
-                username = authDTO.getUsername();
-                user = userDb.findByUsername(username);
-            }
-
             try {
-                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, authDTO.getPassword()));
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            authRequestDTO.getUsername(), authRequestDTO.getPassword(), null);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                String token = jwtGenerator.generateToken(authentication, user.getId(), user.getRole().toString());
-                Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
-                grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
-                System.out.println(grantedAuthorities);
-                return new ResponseEntity<>(new JwtResponseDTO(token), HttpStatus.OK);
+                String jwtToken = authService.login(authRequestDTO);
+                return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
+            } catch (AuthenticationException e) {
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            }
+        }
+    }
+
+    @PostMapping(value = "/log-in-sso")
+    public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+        } else {
+            try {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            ssoLoginRequestDTO.getUsername(), null, null);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwtToken = authService.loginSSO(ssoLoginRequestDTO);
+                return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
             } catch (AuthenticationException e) {
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }

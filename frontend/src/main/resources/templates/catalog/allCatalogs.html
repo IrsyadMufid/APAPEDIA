@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Catalogs</title>
+    <!-- Include Bootstrap CSS -->
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <style>
+        .card-img-top {
+            max-height: 200px; /* Set the maximum height for the images */
+            object-fit: cover; /* Ensure images maintain aspect ratio and cover the container */
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar}"></nav>
+<div class="container mt-5">
+    <h2 class="mb-4">All Catalogs</h2>
+
+    <div class="container mt-3">
+        <form th:action="@{/catalog/search}" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search by Product Name" name="productName">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="container mt-3">
+        <form th:action="@{/catalog/filterByPrice}" method="get">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="minPrice">Min Price:</label>
+                    <input type="number" class="form-control" name="minPrice">
+                </div>
+                <div class="col-md-4">
+                    <label for="maxPrice">Max Price:</label>
+                    <input type="number" class="form-control" name="maxPrice">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-outline-secondary">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="container mt-3">
+        <form th:action="@{/catalog/sort}" method="get">
+            <div class="input-group mb-3">
+                <select class="form-control" name="sortBy">
+                    <option value="productName">Product Name</option>
+                    <option value="price">Price</option>
+                    <!-- Add more options as needed -->
+                </select>
+                <div class="input-group-append">
+                    <select class="form-control" name="sortOrder">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                    <button class="btn btn-outline-secondary" type="submit">Sort</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- "Add Product" Button -->
+    <a th:href="@{/catalog/create}" class="btn btn-primary mb-4">Add Product</a>
+
+<!-- Iterate through the catalogs and display information using Bootstrap cards -->
+<div class="row">
+    <div th:each="catalog : ${catalogs}" class="col-md-4 mb-4">
+        <div class="card" th:if="${!catalog.isDeleted}">
+            <!-- Image -->
+            <img th:src="'data:image/jpeg;base64,' + ${catalog.imageBase64}" class="card-img-top" alt="Product Image">
+
+            <div class="card-body">
+                <!-- Product Information -->
+                <h5 class="card-title" th:text="${catalog.productName}"></h5>
+                <p class="card-text">
+                    Category: <span th:text="${catalog.category.name}"></span><br>
+                    Price: <span th:text="${catalog.price}"></span><br>
+                    Description: <span th:text="${catalog.productDescription}"></span><br>
+                    Stock: <span th:text="${catalog.stock}"></span>
+                </p>
+            </div>
+
+            <!-- Buttons for actions -->
+            <div class="card-footer">
+                <!-- Edit Product Button -->
+                <a th:href="@{'/catalog/update/' + ${catalog.id}}" class="btn btn-secondary btn-sm">Edit Product</a>
+
+                <!-- Delete Product Button -->
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" th:data-target="'#deleteProductModal' + ${catalog.id}">
+                    Delete Product
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Delete Product Modal -->
+<!-- Delete Product Modal -->
+<div th:each="catalog : ${catalogs}" th:id="'deleteProductModal' + ${catalog.id}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the product "<span th:text="${catalog.productName}"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" th:attr="data-catalog-id=${catalog.id}" onclick="softDeleteProduct(this.getAttribute('data-catalog-id'))">Soft Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function softDeleteProduct(productId) {
+        try {
+            $.ajax({
+                url: '/catalog/' + productId,
+                type: 'DELETE',
+                success: function(response) {
+                    console.log('Soft Delete Response:', response);
+                    // Reload the page or update the UI as needed
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.error('Soft Delete Error:', error);
+                    // Handle errors as needed
+                }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface SellerDb extends JpaRepository<Seller, UUID> {
     Optional<Seller> findById(UUID id);
+    Seller findByUsername(String username);
 }

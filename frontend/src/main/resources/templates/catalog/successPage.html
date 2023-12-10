@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <!-- Menginclude file css dan js dari fragment common.html -->
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Success Page</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar}"></nav>
+    <div class="container mt-5">
+        <h2>Success Page</h2>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <!-- Tambahkan elemen HTML sesuai kebutuhan -->
+    </div>
+</body>
+</html>

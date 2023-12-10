@@ -1,10 +1,13 @@
 package com.apapedia.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apapedia.user.dto.request.AuthRequestDTO;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
+import com.apapedia.user.dto.request.SSOLoginRequestDTO;
 import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.RoleEnum;
 import com.apapedia.user.model.Seller;
@@ -12,6 +15,7 @@ import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.CustomerDb;
 import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
+import com.apapedia.user.security.JwtGenerator;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -31,8 +35,11 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    JwtGenerator jwtGenerator;
+
     @Override
-    public UserModel Register(CreateUserRequestDTO createUserDTO) {
+    public UserModel register(CreateUserRequestDTO createUserDTO) {
         if (createUserDTO != null) {
             if (createUserDTO.getRole().equals("Seller")) {
                 Seller seller = new Seller();
@@ -58,5 +65,56 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         return null;
+    }
+
+    @Override
+    public String login(AuthRequestDTO authRequestDTO) {
+        String password = authRequestDTO.getPassword();
+        String username;
+        UserModel user;
+        if (authRequestDTO.getUsername().contains("@")) {
+            user = userDb.findByEmail(authRequestDTO.getUsername());
+            username = user.getUsername();
+        } else {
+            username = authRequestDTO.getUsername();
+            user = userDb.findByUsername(username);
+        }
+        if (user == null) {
+            return "User not found";
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (encoder.matches(password, user.getPassword())) {
+            return jwtGenerator.generateToken(user.getUsername(), user.getRole().toString());
+        } 
+        else if (password.equals(user.getPassword())) {
+            return jwtGenerator.generateToken(user.getUsername(), user.getRole().toString());
+        }
+        else {
+            return "Wrong password";
+        }
+    }
+
+    @Override
+    public String loginSSO(SSOLoginRequestDTO ssoLoginRequestDTO) {
+        String username = ssoLoginRequestDTO.getUsername();
+        String name = ssoLoginRequestDTO.getName();
+
+        Seller seller = sellerDb.findByUsername(username);
+
+        if (seller == null) {
+            seller = new Seller();
+            seller.setName(name);
+            seller.setPassword("seller");
+            seller.setUsername(username);
+            seller.setEmail(username + "@ui.ac.id");
+            seller.setAddress("Placeholder Alamat");
+            seller.setRole(RoleEnum.Seller);
+            seller.setCategory("Official Store");
+            sellerDb.save(seller);
+        }
+
+        return jwtGenerator.generateToken(username, seller.getRole().toString());
     }
 }

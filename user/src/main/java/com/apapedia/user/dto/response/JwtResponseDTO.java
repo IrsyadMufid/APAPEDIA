@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JwtResponseDTO {
     private String accessToken;
-    private String tokenType = "Bearer ";
 
     public JwtResponseDTO(String accessToken) {
         this.accessToken = accessToken;
