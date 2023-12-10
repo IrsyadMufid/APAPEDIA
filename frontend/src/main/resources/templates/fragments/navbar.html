@@ -39,7 +39,7 @@
         <li class="nav-item" th:if="${session == null || session.accessToken == null}">
           <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/login}">Login</a>
         </li>
-        <li class="nav-item" th:if="${session != null && session.accessToken != null && session.loginSSO == null}">
+        <li class="nav-item" th:if="${session != null && session.accessToken != null && session.loginSSO == false}">
           <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/logout}">Logout</a>
         </li>
         <li class="nav-item" th:if="${session != null && session.accessToken != null && session.loginSSO == true}">

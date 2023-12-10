@@ -39,7 +39,13 @@ public class AuthController {
     private AuthService authService;
     
     @GetMapping("")
-    public String home(){
+    public String home(Model model, HttpServletRequest request){
+        if (request.getSession().getAttribute("accessToken") != null){
+            var token = (String) request.getSession().getAttribute("accessToken");
+            var activeUser = authService.getActiveUser(token);
+            model.addAttribute("activeUser", activeUser);
+        }
+        
         return "home";
     }
 
@@ -120,6 +126,7 @@ public class AuthController {
             HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("accessToken", token);
+            httpSession.setAttribute("loginSSO", false);
         }
         return "home";
     }

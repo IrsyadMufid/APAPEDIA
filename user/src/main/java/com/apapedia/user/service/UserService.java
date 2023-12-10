@@ -13,7 +13,9 @@ public interface UserService {
 
     UserModel findUserById(UUID id);
 
-    public Customer findCustomerById(UUID id);
+    Customer findCustomerById(UUID id);
+
+    Seller findSellerById(UUID id);
 
     void deleteUser(UserModel userToDelete);
 

@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.apapedia.frontend.dto.auth.request.AuthRequestDTO;
 import com.apapedia.frontend.dto.auth.response.JwtResponseDTO;
 import com.apapedia.frontend.dto.user.request.SSOLoginRequestDTO;
+import com.apapedia.frontend.dto.user.response.ReadUserResponseDTO;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -54,4 +55,18 @@ public class AuthServiceImpl implements AuthService {
 
         return token;
     }
+
+    @Override
+    public ReadUserResponseDTO getActiveUser(String token) {
+        var response = this.webClient
+                .get()
+                .uri("/api/auth/get-user")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(ReadUserResponseDTO.class)
+                .block();
+        
+        return response;
+    }
+
 }

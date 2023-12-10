@@ -86,10 +86,10 @@ public class AuthServiceImpl implements AuthService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if (encoder.matches(password, user.getPassword())) {
-            return jwtGenerator.generateToken(user.getUsername(), user.getRole().toString());
+            return jwtGenerator.generateToken(user.getUsername(), user.getId(), user.getRole().toString());
         } 
         else if (password.equals(user.getPassword())) {
-            return jwtGenerator.generateToken(user.getUsername(), user.getRole().toString());
+            return jwtGenerator.generateToken(user.getUsername(), user.getId(), user.getRole().toString());
         }
         else {
             return "Wrong password";
@@ -115,6 +115,6 @@ public class AuthServiceImpl implements AuthService {
             sellerDb.save(seller);
         }
 
-        return jwtGenerator.generateToken(username, seller.getRole().toString());
+        return jwtGenerator.generateToken(username, seller.getId(), seller.getRole().toString());
     }
 }

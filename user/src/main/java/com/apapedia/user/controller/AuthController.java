@@ -23,7 +23,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.user.dto.request.AuthRequestDTO;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.request.SSOLoginRequestDTO;
+import com.apapedia.user.dto.request.TokenRequestDTO;
 import com.apapedia.user.dto.response.JwtResponseDTO;
+import com.apapedia.user.dto.response.UserResponseDTO;
+import com.apapedia.user.model.Customer;
+import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.JwtGenerator;
@@ -96,6 +100,49 @@ public class AuthController {
     public ResponseEntity<String> logout() {
         SecurityContextHolder.clearContext();
         return new ResponseEntity<>("Logout success", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/check-token")
+    public ResponseEntity<String> checkToken(@RequestBody String token) {
+        if (jwtGenerator.validateToken(token)) {
+            return new ResponseEntity<>("Token is valid", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Token is invalid", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping(value = "/get-user")
+    public ResponseEntity<UserResponseDTO> getUser(@RequestBody TokenRequestDTO tokenRequestDTO) {
+        String token = tokenRequestDTO.getAccessToken();
+        String username = jwtGenerator.getUsernameFromJWT(token);
+        UserModel user = userDb.findByUsername(username);
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setName(user.getName());
+        userResponseDTO.setUsername(user.getUsername());
+        userResponseDTO.setEmail(user.getEmail());
+        userResponseDTO.setAddress(user.getAddress());
+        userResponseDTO.setBalance(user.getBalance());
+        userResponseDTO.setRole(user.getRole().toString());
+        
+        if (user.getRole().toString().equals("Customer")) {
+            if (user instanceof Customer) {
+                Customer customer = (Customer) user;
+                userResponseDTO.setCartId(customer.getCartId());
+            } else {
+                throw new IllegalArgumentException("User is not a customer");
+            }
+        } else if (user.getRole().toString().equals("Seller")) {
+            if (user instanceof Seller) {
+                Seller seller = (Seller) user;
+                userResponseDTO.setCategory(seller.getCategory());
+            } else {
+                throw new IllegalArgumentException("User is not a seller");
+            }
+        }
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 
 }

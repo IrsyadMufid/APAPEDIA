@@ -11,6 +11,7 @@ import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.CustomerDb;
+import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 
 @Service
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CustomerDb customerDb;
+
+    @Autowired
+    private SellerDb sellerDb;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -44,6 +48,16 @@ public class UserServiceImpl implements UserService {
         for (Customer customer : customerDb.findAll()) {
             if (customer.getId().equals(id)) {
                 return customer;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Seller findSellerById(UUID id) {
+        for (Seller seller : sellerDb.findAll()) {
+            if (seller.getId().equals(id)) {
+                return seller;
             }
         }
         return null;

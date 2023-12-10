@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthEntryPoint))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/auth/**").permitAll();
-                    auth.requestMatchers("/api/user/**").hasAuthority("Admin");
+                    auth.requestMatchers("/api/user/**").hasAnyAuthority("Admin", "Seller", "Customer");
                     auth.requestMatchers("/api/customer/**").hasAnyAuthority("Admin", "Customer");
                     auth.requestMatchers("/api/seller/**").hasAnyAuthority("Admin", "Seller");
                     auth.anyRequest().authenticated();
