@@ -1,4 +1,4 @@
-package com.apapedia.frontend.dto.user.request;
+package com.apapedia.user.dto.request;
 
 import java.util.UUID;
 
@@ -8,11 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
 public class UpdateUserRequestDTO extends CreateUserRequestDTO {
     private UUID id;
 

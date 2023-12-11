@@ -1,6 +1,7 @@
+import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/screens/login.dart';
-import 'package:flutter_apapedia/screens/view_all_buku.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_apapedia/screens/register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'APAPEDIA',
       routes: {
-        '/': (context) => const LoginFormScreen(),
-        '/all-buku': (context) => const BukuScreen(),
+        '/': (context) => HomeScreen(),
+        '/login': (context) => const LoginFormScreen(),
+        '/register': (context) => RegisterPage()
       },
     );
   }

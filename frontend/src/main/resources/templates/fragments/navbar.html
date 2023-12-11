@@ -26,15 +26,7 @@
           <a class="nav-link" th:classappend="${activeFragment == 'orders'} ? 'active' : ''" th:href="@{/orders/view-all}">Order History</a>
         </li>
         <li class="nav-item">
-          <div class="dropdown">
-            <a class="nav-link dropdown-toggle" th:classappend="${activeFragment == 'profile'} ? 'active' : ''" th:href="@{/profile}" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              Profile
-            </a>
-            <div class="dropdown-menu" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" th:if="${activeUser != null}" th:href="@{user/profile/withdraw/{id}(id=${activeUser.id})}">Withdraw Balance</a>
-              <a class="dropdown-item" th:if="${activeUser != null}" th:href="@{user/profile/edit/{id}(id=${activeUser.id})}">Edit Profile</a>
-            </div>
-          </div>
+          <a class="nav-link" th:classappend="${activeFragment == 'profile'} ? 'active' : ''" th:href="@{user/profile/{id}(id=*{activeUserId})}">Profile</a>
         </li>
         <li class="nav-item" th:if="${session == null || session.accessToken == null}">
           <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/login}">Login</a>

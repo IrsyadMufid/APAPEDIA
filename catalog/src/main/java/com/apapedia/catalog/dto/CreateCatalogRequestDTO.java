@@ -1,5 +1,7 @@
 package com.apapedia.catalog.dto;
 
+import org.hibernate.validator.constraints.UUID;
+
 import com.apapedia.catalog.model.Category;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,4 +31,6 @@ public class CreateCatalogRequestDTO {
     private byte[] image;
 
     private Category category;
+
+    private UUID sellerId;
 }

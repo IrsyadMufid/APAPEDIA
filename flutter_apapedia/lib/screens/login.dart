@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/utils/color_pallette.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +62,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
           prefs.setString('token', token);
 
           await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const BukuScreen()));
+              MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -95,7 +96,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text("Baca Baca",
+                  const Text("APAPEDIA",
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.w700)),
                   const SizedBox(

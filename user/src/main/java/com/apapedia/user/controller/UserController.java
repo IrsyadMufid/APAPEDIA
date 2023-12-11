@@ -10,16 +10,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.apapedia.user.dto.request.TokenRequestDTO;
+import com.apapedia.user.dto.UserMapper;
+import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.UserResponseDTO;
+import com.apapedia.user.model.RoleEnum;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.JwtGenerator;
@@ -38,6 +38,9 @@ public class UserController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Autowired
     UserDb userDb;
@@ -60,47 +63,38 @@ public class UserController {
         try {
             var user = userService.findUserById(UUID.fromString(id));
             userService.deleteUser(user);
-            return ResponseEntity.ok("User has been deleted");
+            return ResponseEntity.ok("User with id " + id + " has been deleted");
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Id User " + id + " not found");
         }
     }
 
-    @PutMapping(value = "/{id}/edit-user")
-    public ResponseEntity<String> editUser(@PathVariable("id") String id, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "username", required = false) String username,
-            @RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, @RequestParam(value = "address", required = false) String address) {
+    @PutMapping(value = "/edit-user/{id}")
+    public ResponseEntity<UpdateUserRequestDTO> editUser(@PathVariable("id") String id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         try {
             var user = userService.findUserById(UUID.fromString(id));
-            if (user.getPassword().equals(password)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password cannot be the same");
-            }
-            else {
-                if (name == null) {
-                    name = user.getName();
-                }
-                if (username == null) {
-                    username = user.getUsername();
-                }
-                if (email == null) {
-                    email = user.getEmail();
-                }
-                if (password == null) {
-                    password = user.getPassword();
-                }
-                if (address == null) {
-                    address = user.getAddress();
-                }
-                userService.editUser(user, name, username, email, password, address);
-            }
-            return ResponseEntity.ok("User has been edited");
+            userService.editUser(user, updateUserRequestDTO);
+            return ResponseEntity.ok(updateUserRequestDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Id User " + id + " not found");
         }
     }
 
-    @PutMapping(value = "/{id}/add-balance/{balance}")
+    @PutMapping(value = "/edit-user-seller/{id}")
+    public ResponseEntity<UpdateUserRequestDTO> editUserSeller(@PathVariable("id") String id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        try {
+            var user = userService.findSellerById(UUID.fromString(id));
+            userService.editUserSeller(user, updateUserRequestDTO);
+            return ResponseEntity.ok(updateUserRequestDTO);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
+
+    @PutMapping(value = "/add-balance/{id}/{balance}")
     public ResponseEntity<String> addBalance(@PathVariable("id") String id, @PathVariable("balance") long balance) {
         try {
             var user = userService.findUserById(UUID.fromString(id));
@@ -119,7 +113,7 @@ public class UserController {
         }
     }
 
-    @PutMapping(value = "/{id}/subtract-balance/{balance}")
+    @PutMapping(value = "/subtract-balance/{id}/{balance}")
     public ResponseEntity<String> subtractBalance(@PathVariable("id") String id, @PathVariable("balance") long balance) {
         try {
             var user = userService.findUserById(UUID.fromString(id));
@@ -133,6 +127,40 @@ public class UserController {
             }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
+
+    @PutMapping(value = "/add-cart/{id}/{cartId}")
+    public ResponseEntity<String> addCart(@PathVariable("id") String id, @PathVariable("cartId") String cartId) {
+        try {
+            var user = userService.findCustomerById(UUID.fromString(id));
+            if (user.getRole().equals(RoleEnum.Customer)) {
+                user.setCartId(UUID.fromString(cartId));
+                return ResponseEntity.ok("Cart has been added");
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a customer");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+        }
+    }
+
+    @DeleteMapping(value = "/delete-cart/{id}")
+    public ResponseEntity<String> deleteCart(@PathVariable("id") String id) {
+        try {
+            var user = userService.findCustomerById(UUID.fromString(id));
+            if (user.getRole().equals(RoleEnum.Customer)) {
+                user.setCartId(null);
+                return ResponseEntity.ok("Cart has been deleted");
+            }
+            else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ID is not a customer");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
         }
     }
 }

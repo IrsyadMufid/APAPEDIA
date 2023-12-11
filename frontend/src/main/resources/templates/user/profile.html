@@ -1,13 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Profile</title>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <meta charset="UTF-8">
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Profile - APAPEDIA</title>
 </head>
 
 <body>
-    
+    <nav th:replace="~{fragments/navbar :: navbar (activeFragment='profile')}"></nav>
+    <div class="container pt-5">
+        <div class="card mx-auto">
+          <h2 class="card-header pt-2 text-center">Profile</h2>
+            <div class="card-body">
+              <div class="justify-content-center">
+                <br>
+                ID: <br>
+                <input class="form-control" type="text" th:value="${user.id}" disabled />
+                <br><br>
+
+                Name: <br>
+                <input class="form-control" type="text" th:field="*{user.name}" disabled />
+                <br><br>
+
+                Address: <br>
+                <input class="form-control" type="text" th:field="*{user.address}" disabled />
+                <br><br>
+
+                Category: <br>
+                <select class="form-control" th:field="*{user.category}" disabled>
+                <option th:value="Official-Store">Official Store</option>
+                <option th:value="Biasa">Biasa</option>
+                </select>
+                <br><br>
+
+                <strong>APAPAY<strong> Balance: <br>
+                <input required class="form-control" type="number" th:field="*{user.balance}" disabled />
+                <br><br>
+                
+                <div class="text-center">
+                    <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Update</a>
+                    <a class="btn btn-danger" th:href="@{/logout}">Sign Out</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>

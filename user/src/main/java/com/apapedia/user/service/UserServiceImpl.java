@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.UserModel;
@@ -85,20 +86,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(UserModel user, String name, String username, String email, String password, String address) {
-        user.setName(name);
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setAddress(address);
+    public void editUser(UserModel user, UpdateUserRequestDTO updateUserRequestDTO) {
+        user.setUsername(updateUserRequestDTO.getUsername());
+        user.setName(updateUserRequestDTO.getName());
+        user.setPassword(passwordEncoder.encode(updateUserRequestDTO.getPassword()));
+        user.setEmail(updateUserRequestDTO.getEmail());
+        user.setAddress(updateUserRequestDTO.getAddress());
         userDb.save(user);
     }
 
     @Override
-    public Seller addCategory(String id, String category) {
-        Seller seller = (Seller) findUserById(UUID.fromString(id));
-        seller.setCategory(category);
-        userDb.save(seller);
-        return seller;
+    public void editUserSeller(Seller seller, UpdateUserRequestDTO updateUserRequestDTO) {
+        seller.setUsername(updateUserRequestDTO.getUsername());
+        seller.setName(updateUserRequestDTO.getName());
+        seller.setEmail(updateUserRequestDTO.getEmail());
+        seller.setAddress(updateUserRequestDTO.getAddress());
+        seller.setCategory(updateUserRequestDTO.getCategory());
+        sellerDb.save(seller);
+    }
+
+    @Override
+    public void editUserCustomer(Customer customer, UpdateUserRequestDTO updateUserRequestDTO) {
+        customer.setUsername(updateUserRequestDTO.getUsername());
+        customer.setName(updateUserRequestDTO.getName());
+        customer.setPassword(passwordEncoder.encode(updateUserRequestDTO.getPassword()));
+        customer.setEmail(updateUserRequestDTO.getEmail());
+        customer.setAddress(updateUserRequestDTO.getAddress());
+        customerDb.save(customer);
     }
 }

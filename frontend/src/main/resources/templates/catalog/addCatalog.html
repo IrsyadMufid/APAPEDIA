@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <!-- Menginclude file css dan js dari fragment common.html -->
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <title>Add Catalog</title>
 </head>
@@ -21,7 +17,7 @@
         <div th:if="${successMessage}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
         </div>
-        <form id="addCatalogForm" th:action="@{catalog/create-catalog}" method="post" enctype="multipart/form-data" th:object="${createCatalogRequestDTO}" class="mt-4">
+        <form id="addCatalogForm" th:action="@{http://localhost:8083/catalog/create-catalog}" method="post" enctype="multipart/form-data" th:object="${createCatalogRequestDTO}" class="mt-4">
             <div class="form-group">
                 <label for="productName">Product Name:</label>
                 <input type="text" id="productName" name="productName" th:field="*{productName}" required class="form-control">
