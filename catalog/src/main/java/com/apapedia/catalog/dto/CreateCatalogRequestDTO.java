@@ -32,5 +32,5 @@ public class CreateCatalogRequestDTO {
 
     private Category category;
 
-    private UUID sellerId;
+    private String sellerId;
 }

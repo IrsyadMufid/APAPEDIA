@@ -34,53 +34,50 @@ import java.util.HashMap;
 @RequestMapping("/catalog")
 public class CatalogController {
 
-@Autowired
-private CatalogService catalogService;
+    @Autowired
+    private CatalogService catalogService;
 
-@Autowired
-private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-@Autowired
-private CatalogMapper catalogMapper;
+    @Autowired
+    private CatalogMapper catalogMapper;
 
 
-@PostMapping("/create-catalog")
-public ResponseEntity<Map<String, String>> addCatalog(
-        @Valid @ModelAttribute CreateCatalogRequestDTO catalogDTO,
-        @RequestPart("file") MultipartFile file,
-        BindingResult bindingResult) {
-
-    if (bindingResult.hasErrors()) {
-        throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
-        );
-    } else {
-        Catalog catalog = catalogMapper.createCatalogRequestDTOToCatalog(catalogDTO);
-        catalog.setCategory(catalogDTO.getCategory());
-
-        // Process the file and set the image content in the Catalog entity
-        byte[] imageContent;
-        try {
-            imageContent = catalogService.processFile(file);
-        } catch (IOException e) {
+    @PostMapping("/create-catalog")
+    public ResponseEntity<Map<String, String>> addCatalog(@Valid @ModelAttribute CreateCatalogRequestDTO catalogDTO, @RequestPart("file") MultipartFile file, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file"
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
+        } else {
+            Catalog catalog = catalogMapper.createCatalogRequestDTOToCatalog(catalogDTO);
+            catalog.setCategory(catalogDTO.getCategory());
+            catalog.setSellerId(UUID.fromString(catalogDTO.getSellerId()));
+
+            // Process the file and set the image content in the Catalog entity
+            byte[] imageContent;
+            try {
+                imageContent = catalogService.processFile(file);
+            } catch (IOException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file"
+                );
+            }
+            catalog.setImage(imageContent);
+
+            // Save the catalog entity
+            catalogService.addCatalog(catalog);
+
+            // Set the success message
+            String successMessage = "Product '" + catalogDTO.getProductName() + "' created successfully.";
+
+            // Return the success message as JSON
+            Map<String, String> response = new HashMap<>();
+            response.put("successMessage", successMessage);
+            return ResponseEntity.ok(response);
         }
-        catalog.setImage(imageContent);
-
-        // Save the catalog entity
-        catalogService.addCatalog(catalog);
-
-        // Set the success message
-        String successMessage = "Product '" + catalogDTO.getProductName() + "' created successfully.";
-
-        // Return the success message as JSON
-        Map<String, String> response = new HashMap<>();
-        response.put("successMessage", successMessage);
-        return ResponseEntity.ok(response);
     }
-}
 
     @GetMapping("/allCatalogs")
     public List<ShowCatalogRequestDTO> getAllCatalogsSortedByName() {
@@ -90,6 +87,13 @@ public ResponseEntity<Map<String, String>> addCatalog(
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all-catalogs-by-seller-id")
+    public List<ShowCatalogRequestDTO> getAllCatalogsBySellerId(@RequestParam UUID sellerId) {
+        List<Catalog> catalogs = catalogService.findCatalogsBySellerId(sellerId);
+        return catalogs.stream()
+                .map(catalogMapper::catalogToCatalogResponseDTO)
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ShowCatalogRequestDTO> getCatalogById(@PathVariable UUID id) {

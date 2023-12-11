@@ -23,6 +23,7 @@ public class ShowCatalogRequestDTO {
     private byte[] image;
     private Boolean isDeleted = false;
     private ShowCategoryRequestDTO category;
+    private UUID sellerId;
 
     // Other fields, getters, and setters...
 

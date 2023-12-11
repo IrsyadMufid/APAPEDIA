@@ -22,6 +22,7 @@ public interface CatalogService {
     Catalog updateCatalog(UUID id, UpdateCatalogRequestDTO updateCatalogRequestDTO, byte[] imageContent);
     void softDeleteCatalog(UUID id);
     List<Catalog> findCatalogsByProductName(String productName);
+    List<Catalog> findCatalogsBySellerId(UUID sellerId);
     List<Catalog> findCatalogsByPriceRange(Integer minPrice, Integer maxPrice);
     List<Catalog> findAllSorted(String sortBy, String sortOrder);
     public byte[] processFile(MultipartFile file) throws IOException;

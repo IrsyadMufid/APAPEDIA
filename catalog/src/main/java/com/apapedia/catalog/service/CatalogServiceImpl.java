@@ -85,6 +85,11 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
+    public List<Catalog> findCatalogsBySellerId(UUID sellerId) {
+        return catalogDb.findBySellerId(sellerId);
+    }
+
+    @Override
     public List<Catalog> findCatalogsByPriceRange(Integer minPrice, Integer maxPrice) {
         return catalogDb.findByPriceBetween(minPrice, maxPrice);
     }

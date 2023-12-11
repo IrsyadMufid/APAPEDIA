@@ -20,4 +20,5 @@ public class CatalogListResponseDTO {
     private byte[] image;
     private Boolean isDeleted = false;
     private ShowCategoryRequestDTO category;    // or CategoryDTO if needed
+    private String sellerId;
 }
