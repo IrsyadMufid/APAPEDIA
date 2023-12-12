@@ -27,5 +27,5 @@ public class CreateCatalogRequestDTO {
 
     private byte[] image;
 
-    private String category;
+    private Category category;
 }
