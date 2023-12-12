@@ -46,13 +46,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ReadUserResponseDTO subtractBalance(String id, String token, int balance) {
+    public String subtractBalance(String id, String token, int amount) {
         var response = this.webClient
                 .put()
-                .uri("/api/user/subtract-balance/" + id + "/" + balance)
+                .uri("/api/user/subtract-balance/" + id + "/" + amount)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
-                .bodyToMono(ReadUserResponseDTO.class)
+                .bodyToMono(String.class)
                 .block();
         
         return response;

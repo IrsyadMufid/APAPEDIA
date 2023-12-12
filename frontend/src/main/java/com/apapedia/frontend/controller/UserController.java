@@ -62,19 +62,23 @@ public class UserController {
     }
 
     @GetMapping("/profile/withdraw/{id}")
-    public String profileWithdraw(@PathVariable String id, Model model) {
-        model.addAttribute("activeUserId", id);
-        return "/user/withdraw-form";
-    }
-
-    @PutMapping("/profile/withdraw/{id}")
-    public String profileWithdrawSubmit(@PathVariable String id, Model model, HttpServletRequest request, @RequestParam int balance) {
+    public String profileWithdraw(@PathVariable String id, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         var token = (String) session.getAttribute("accessToken");
-        var response = userService.subtractBalance(id, token, balance);
+
+        var user = userService.getUserById(id, token);
         model.addAttribute("activeUserId", id);
-        model.addAttribute("response", response);
-        return "/user/withdraw-success";
+        model.addAttribute("user", user);
+        return "/user/profile-withdraw-form";
+    }
+
+    @PostMapping("/profile/withdraw/{id}")
+    public String profileWithdrawSubmit(@PathVariable String id, Model model, HttpServletRequest request, @RequestParam int amount) {
+        HttpSession session = request.getSession();
+        var token = (String) session.getAttribute("accessToken");
+        userService.subtractBalance(id, token, amount);
+        model.addAttribute("activeUserId", id);
+        return "redirect:/user/profile/{id}";
     }
 
     @GetMapping("/profile/delete/{id}")

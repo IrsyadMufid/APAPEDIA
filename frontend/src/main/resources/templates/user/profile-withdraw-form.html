@@ -23,13 +23,13 @@
                 <p th:text="${user.balance}"></p>
                 <br>
 
-                <form th:action="@{/user/profile/edit/{id}(id=${user.id})}" method="POST">
+                <form th:action="@{/user/profile/withdraw/{id}(id=${user.id})}" method="POST">
                     <strong>APAPAY</strong> Withdraw Amount: <br>
                     <input required class="form-control" id="amount" name="amount" type="number"/>
                     <br>
                     
                     <div class="text-center">
-                    <button type="submit" class="btn btn-danger">Withdraw</button>
+                    <button type="submit" class="btn btn-warning">Withdraw</button>
                     <a class="btn btn-secondary" th:href="@{/user/profile/{id}(id=${user.id})}">Back</a>
                     </div>
                 </form>

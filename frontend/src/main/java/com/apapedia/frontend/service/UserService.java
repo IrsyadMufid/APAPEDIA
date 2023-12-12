@@ -10,5 +10,5 @@ public interface UserService {
 
     String deleteUser(String id, String token);
 
-    ReadUserResponseDTO subtractBalance(String id, String token, int balance);
+    String subtractBalance(String id, String token, int balance);
 }
