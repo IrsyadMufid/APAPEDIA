@@ -76,7 +76,39 @@ public class AuthController {
         return new ModelAndView("redirect:/");
     }
 
-    @GetMapping("/login")
+    @GetMapping("/validate-ticket-login")
+    public ModelAndView userLoginSSO(@RequestParam(value = "ticket", required = false) String ticket, HttpServletRequest request) {
+        ServiceResponse serviceResponse = this.webClient.get().uri(
+                String.format(
+                        Setting.SERVER_VALIDATE_TICKET,
+                        ticket,
+                        Setting.CLIENT_LOGIN_USER
+                )
+        ).retrieve().bodyToMono(ServiceResponse.class).block();
+
+        Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
+        String username = serviceResponse.getAuthenticationSuccess().getUser();
+        
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, "seller", null);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+        
+        String name = attributes.getNama();
+        var token = authService.loginUserSSO(username, name);
+
+        if (token != null) {
+            HttpSession httpSession = request.getSession(true);
+            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            httpSession.setAttribute("accessToken", token);
+            httpSession.setAttribute("loginSSO", true);
+            return new ModelAndView("redirect:/");
+        } else {
+            request.getSession().invalidate();
+            return new ModelAndView("redirect:/");
+        }
+    }
+
+    @GetMapping("/register")
     public ModelAndView loginSSO() {
         return new ModelAndView("redirect:"+ Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
     }
@@ -86,11 +118,9 @@ public class AuthController {
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }
 
-    @GetMapping("/register")
-    public String register(Model model){
-        var registerDTO = new CreateUserRequestDTO();
-        model.addAttribute("registerDTO", registerDTO);
-        return "/user/register";
+    @GetMapping("/login")
+    public ModelAndView loginUserSSO() {
+        return new ModelAndView("redirect:"+ Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN_USER);
     }
 
     @PostMapping("/logout")

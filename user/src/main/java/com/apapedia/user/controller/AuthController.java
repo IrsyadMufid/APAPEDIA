@@ -62,6 +62,23 @@ public class AuthController {
         }
     }
 
+    @PostMapping(value = "/log-in-sso-user")
+    public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+        } else {
+            try {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            ssoLoginRequestDTO.getUsername(), null, null);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwtToken = authService.loginErrorSSO(ssoLoginRequestDTO);
+                return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
+            } catch (AuthenticationException e) {
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            }
+        }
+    }
+
     @PostMapping(value = "/log-in")
     public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {

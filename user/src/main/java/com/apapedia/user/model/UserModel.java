@@ -28,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE main_user SET is_deleted = true WHERE id = ?")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="main_user")
 public class UserModel {

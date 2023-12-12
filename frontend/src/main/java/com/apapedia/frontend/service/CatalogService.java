@@ -4,15 +4,12 @@ import java.util.List;
 
 import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogListResponseDTO;
+import com.apapedia.frontend.dto.catalog.response.CatalogResponseDTO;
 
 public interface CatalogService {
-    CatalogListResponseDTO addCatalog(String token, CreateCatalogRequestDTO catalogDTO);
+    // CatalogResponseDTO addCatalog(String token, CreateCatalogRequestDTO catalogDTO);
     
-    List<CatalogListResponseDTO> getCatalogList(String token);
+    // List<CatalogListResponseDTO> getCatalogList(String token);
 
-    CatalogListResponseDTO getCatalogById(String id, String token);
-
-    
-
-
+    // CatalogListResponseDTO getCatalogById(String id, String token);
 }

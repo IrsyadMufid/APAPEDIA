@@ -18,35 +18,48 @@
                 <shopicon-bold-account size="xl"></shopicon-bold-account>
                 </div>
                 <br>
-                ID: <br>
-                <input class="form-control" type="text" th:value="${user.id}" disabled />
-                <br><br>
 
                 Name: <br>
                 <input class="form-control" type="text" th:field="*{user.name}" disabled />
-                <br><br>
+                <br>
+
+                Email: <br>
+                <input class="form-control" type="text" th:field="*{user.email}" disabled />
+                <br>
 
                 Address: <br>
                 <input class="form-control" type="text" th:field="*{user.address}" disabled />
-                <br><br>
+                <br>
 
                 Category: <br>
                 <select class="form-control" th:field="*{user.category}" disabled>
                 <option th:value="Official-Store">Official Store</option>
                 <option th:value="Biasa">Biasa</option>
                 </select>
-                <br><br>
+                <br>
 
-                <strong>APAPAY<strong> Balance: <br>
+                <div class="text-center">
+                    <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Edit Profile</a>
+                </div>
+
+                <strong>APAPAY</strong> Balance: <br>
                 <input required class="form-control" type="number" th:field="*{user.balance}" disabled />
-                <br><br>
+                <br>
                 
                 <div class="text-center">
-                    <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Update</a>
-                    <a class="btn btn-danger" th:href="@{/logout}">Sign Out</a>
+                    <a class="btn btn-info" th:href="@{/user/profile/withdraw/{id}(id=${user.id})}">Withdraw <strong>APAPAY</strong></a>
+                    <br><br>
+                </div>
+            
+                <div class="text-center">
+                    <a class="btn btn-danger" th:href="@{/user/profile/delete/{id}(id=${user.id})}">Delete Account</a>
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-danger" th:href="@{/logout-sso}">Sign Out</a>
                 </div>
             </div>
             </div>
         </div>
+        <br>
     </div>
 </body>

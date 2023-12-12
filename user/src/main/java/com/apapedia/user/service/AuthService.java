@@ -9,4 +9,5 @@ public interface AuthService {
     UserModel register(CreateUserRequestDTO userDTO);
     String login(AuthRequestDTO authRequestDTO);
     String loginSSO(SSOLoginRequestDTO ssoLoginRequestDTO);
+    String loginErrorSSO(SSOLoginRequestDTO ssoLoginRequestDTO);
 }

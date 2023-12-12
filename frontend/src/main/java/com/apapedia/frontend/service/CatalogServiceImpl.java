@@ -5,7 +5,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
+import com.apapedia.frontend.dto.catalog.response.CatalogListResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogResponseDTO;
 
 @Service
@@ -18,18 +21,33 @@ public class CatalogServiceImpl implements CatalogService {
                 .build();
     }
 
-    @Override
-    public CatalogResponseDTO addCatalog(String token, CreateCatalogRequestDTO createCatalogRequestDTO) {
-        var response = this.webClient
-                .post()
-                .uri("/api/catalog/add-catalog")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .bodyValue(createCatalogRequestDTO)
-                .retrieve()
-                .bodyToMono(CatalogResponseDTO.class)
-                .block();
+    // @Override
+    // public CatalogResponseDTO addCatalog(String token, CreateCatalogRequestDTO createCatalogRequestDTO) {
+    //     var response = this.webClient
+    //             .post()
+    //             .uri("/api/catalog/add-catalog")
+    //             .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+    //             .bodyValue(createCatalogRequestDTO)
+    //             .retrieve()
+    //             .bodyToMono(CatalogResponseDTO.class)
+    //             .block();
         
-        return response;
-    }
+    //     return response;
+    // }
+
+    // @Override
+    // public List<CatalogListResponseDTO> getCatalogList(String token) {
+    //     var response = this.webClient
+    //             .get()
+    //             .uri("/api/catalog/all-catalogs")
+    //             .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+    //             .retrieve()
+    //             .bodyToMono(CatalogResponseDTO.class)
+    //             .block();
+        
+    //     return response.getCatalogList();
+    // }
+
+
     
 }

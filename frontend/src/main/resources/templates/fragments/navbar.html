@@ -5,9 +5,12 @@
 </head>
 <body>
 <nav th:fragment="navbar (activeFragment)" class="navbar navbar-expand-lg navbar-light bg-secondary navbar-dark navbar-inverse navbar-fixed-top">
-    <a class="navbar-brand fw-bold text-white ms-3" href="/">
-      <shopicon-bold-cart2></shopicon-bold-cart2>
-      APAPEDIA</a>
+  <a class="navbar-brand fw-bold text-white ms-3" href="/">
+    <span style="display: flex; align-items: center;">
+        <shopicon-bold-cart5></shopicon-bold-cart5>
+        APAPEDIA
+    </span>
+</a>
     <button 
       class="navbar-toggler" 
       type="button" 
@@ -24,14 +27,17 @@
         <li class="nav-item">
           <a class="nav-link" th:classappend="${activeFragment == 'catalog'} ? 'active' : ''" th:href="@{/catalog/all}">Catalog</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" th:if="${session != null && session.accessToken != null}">
           <a class="nav-link" th:classappend="${activeFragment == 'orders'} ? 'active' : ''" th:href="@{/orders/view-all}">Order History</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" th:classappend="${activeFragment == 'profile'} ? 'active' : ''" th:href="@{user/profile/{id}(id=*{activeUserId})}">Profile</a>
+        <li class="nav-item" th:if="${session != null && session.accessToken != null}">
+          <a class="nav-link" th:classappend="${activeFragment == 'profile'} ? 'active' : ''" th:href="@{/user/profile/{id}(id=*{activeUserId})}">Profile</a>
         </li>
         <li class="nav-item" th:if="${session == null || session.accessToken == null}">
           <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/login}">Login</a>
+        </li>
+        <li class="nav-item" th:if="${session == null || session.accessToken == null}">
+          <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/register}">Register</a>
         </li>
         <li class="nav-item" th:if="${session != null && session.accessToken != null && session.loginSSO == false}">
           <a class="nav-link" th:classappend="${activeFragment == ''} ? '' : ''" th:href="@{/logout}">Logout</a>

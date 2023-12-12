@@ -44,4 +44,30 @@ public class UserServiceImpl implements UserService {
         
         return response;
     }
+
+    @Override
+    public ReadUserResponseDTO subtractBalance(String id, String token, int balance) {
+        var response = this.webClient
+                .put()
+                .uri("/api/user/subtract-balance/" + id + "/" + balance)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(ReadUserResponseDTO.class)
+                .block();
+        
+        return response;
+    }
+
+    @Override
+    public String deleteUser(String id, String token) {
+        var response = this.webClient
+                .delete()
+                .uri("/api/user/" + id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        
+        return response;
+    }
 }

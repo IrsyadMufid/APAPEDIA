@@ -11,42 +11,48 @@
     <nav th:replace="~{fragments/navbar :: navbar (activeFragment='profile')}"></nav>
     <div class="container pt-5">
         <div class="card mx-auto">
-          <h2 class="card-header pt-2 text-center">Profile</h2>
+          <h2 class="card-header pt-2 text-center">Edit Profile</h2>
             <div class="card-body">
               <div class="justify-content-center">
                 <div class="d-flex justify-content-center">
                 <shopicon-bold-account size="xl"></shopicon-bold-account>
                 </div>
                 <br>
-                ID: <br>
-                <input class="form-control" type="text" th:value="${user.id}" disabled />
-                <br><br>
+                <form th:action="@{/user/profile/edit/{id}(id=${user.id})}" th:object="${user}" method="POST">
+                    <input class="form-control" type="text" th:field="*{username}" hidden/>
+                    
+                    Name: <br>
+                    <input class="form-control" type="text" th:field="*{name}" />
+                    <br>
 
-                Name: <br>
-                <input class="form-control" type="text" th:field="*{user.name}" disabled />
-                <br><br>
+                    Email: <br>
+                    <input class="form-control" type="text" th:field="*{email}" />
+                    <br>
 
-                Address: <br>
-                <input class="form-control" type="text" th:field="*{user.address}" disabled />
-                <br><br>
+                    Address: <br>
+                    <input class="form-control" type="text" th:field="*{address}" />
+                    <br>
 
-                Category: <br>
-                <select class="form-control" th:field="*{user.category}" disabled>
-                <option th:value="Official-Store">Official Store</option>
-                <option th:value="Biasa">Biasa</option>
-                </select>
-                <br><br>
+                    Category: <br>
+                    <select class="form-control" th:field="*{category}">
+                    <option th:value="Official-Store">Official Store</option>
+                    <option th:value="Biasa">Biasa</option>
+                    </select>
+                    <br>
 
-                <strong>APAPAY<strong> Balance: <br>
-                <input required class="form-control" type="number" th:field="*{user.balance}" disabled />
-                <br><br>
-                
-                <div class="text-center">
-                    <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Update</a>
-                    <a class="btn btn-danger" th:href="@{/logout}">Sign Out</a>
-                </div>
+                    <strong>APAPAY</strong> Balance: <br>
+                    <input required class="form-control" type="number" th:field="*{balance}" disabled />
+                    <br>
+                    
+                    <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a class="btn btn-secondary" th:href="@{/user/profile/{id}(id=${user.id})}">Back</a>
+                    </div>
+                </form>
             </div>
             </div>
         </div>
+        <br>
     </div>
 </body>
+</html>

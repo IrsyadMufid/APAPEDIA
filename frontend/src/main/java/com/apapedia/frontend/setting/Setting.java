@@ -5,6 +5,8 @@ public class Setting {
 
     final public static String CLIENT_LOGIN = CLIENT_BASE_URL + "/validate-ticket";
 
+    final public static String CLIENT_LOGIN_USER = CLIENT_BASE_URL + "/validate-ticket-login";
+
     final public static String CLIENT_LOGOUT = CLIENT_BASE_URL + "/logout";
 
     final public static String SERVER_BASE_URL = "https://sso.ui.ac.id/cas2";

@@ -21,6 +21,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public String loginUserSSO(String username, String name) {
+        var body = new SSOLoginRequestDTO(username, name);
+
+        var response = this.webClient
+                .post()
+                .uri("/api/auth/log-in-sso-user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(JwtResponseDTO.class)
+                .block();
+        
+        var token = response.getAccessToken();
+
+        return token;
+    }
+
+    @Override
     public String getTokenSSO(String username, String name) {
         var body = new SSOLoginRequestDTO(username, name);
 

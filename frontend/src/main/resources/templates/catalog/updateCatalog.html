@@ -3,15 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+        <!-- Include Bootstrap CSS -->
         <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+        <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <title>Update Catalog</title>
     </head>
 <body>
     <nav th:replace="~{fragments/navbar}"></nav>
     <div class="container mt-5">
         <h2>Update Catalog</h2>
-        <form id="updateCatalogForm" action="#" th:action="@{'/catalog/' + ${updateCatalogResponseDTO.id}}" method="post" enctype="multipart/form-data">
+        <form id="updateCatalogForm" action="#" th:action="@{'http://localhost:8083/catalog/' + ${updateCatalogResponseDTO.id}}" method="post" enctype="multipart/form-data">
             <input name="_method" type="hidden" value="PUT" />
             <input type="hidden" name="id" th:value="${updateCatalogResponseDTO.id}" />
             
@@ -88,7 +93,7 @@
 
             $.ajax({
                 url: form.action,
-                type: 'POST',
+                type: 'PUT',
                 data: formData,
                 cache: false,
                 contentType: false,

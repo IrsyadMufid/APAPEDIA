@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Edit Profile - APAPEDIA</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar (activeFragment='profile')}"></nav>
+    <div class="container pt-5">
+        <div class="card mx-auto">
+          <h2 class="card-header pt-2 text-center">Withdraw <strong>APAPAY</strong></h2>
+            <div class="card-body">
+              <div class="justify-content-center">
+                <div class="d-flex justify-content-center">
+                <shopicon-bold-money size="xl"></shopicon-bold-money>
+                </div>
+                <br>
+
+                <strong>APAPAY</strong> Current Balance: <br>
+                <p th:text="${user.balance}"></p>
+                <br>
+
+                <form th:action="@{/user/profile/edit/{id}(id=${user.id})}" method="POST">
+                    <strong>APAPAY</strong> Withdraw Amount: <br>
+                    <input required class="form-control" id="amount" name="amount" type="number"/>
+                    <br>
+                    
+                    <div class="text-center">
+                    <button type="submit" class="btn btn-danger">Withdraw</button>
+                    <a class="btn btn-secondary" th:href="@{/user/profile/{id}(id=${user.id})}">Back</a>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</body>
+</html>

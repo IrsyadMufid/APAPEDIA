@@ -18,6 +18,11 @@ import java.util.Base64;
 import java.util.UUID;
 
 import com.apapedia.frontend.dto.catalog.response.UpdateCatalogResponseDTO;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
 
 @CrossOrigin(origins = "http://localhost:8083")
@@ -28,8 +33,11 @@ public class CatalogController {
     String mainUrl = "http://localhost:8083";
 
     @GetMapping("/create")
-    public String showAddCatalogForm(Model model) {
+    public String showAddCatalogForm(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
         model.addAttribute("createCatalogRequestDTO", new CreateCatalogRequestDTO());
+
+        var id = (UUID) session.getAttribute("activeUserId");
 
         // Retrieve the list of categories using RestTemplate
         String categoriesUrl = mainUrl + "/category/all"; // Adjust the endpoint as per your backend
@@ -41,15 +49,18 @@ public class CatalogController {
         );
 
         List<Map<String, Object>> categories = categoriesResponse.getBody();
+        model.addAttribute("activeUserId", id);
         model.addAttribute("categories", categories);
 
         return "/catalog/addCatalog"; // Name of the HTML template (addCatalog.html)
     }
 
     @GetMapping("/all")
-    public String showAllCatalogs(Model model) {
+    public String showAllCatalogs(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        var id = (UUID) session.getAttribute("activeUserId");
         // Use RestTemplate to get the list of catalogs from the REST service
-        String catalogsUrl = mainUrl + "/catalog/allCatalogs";
+        String catalogsUrl = mainUrl + "/catalog/all-catalogs";
         ResponseEntity<List<Map<String, Object>>> catalogsResponse = new RestTemplate().exchange(
                 catalogsUrl,
                 HttpMethod.GET,
@@ -68,7 +79,7 @@ public class CatalogController {
     
             catalog.put("imageBase64", Base64.getEncoder().encodeToString(imageBytes));
         });
-    
+        model.addAttribute("activeUserId", id);
         model.addAttribute("catalogs", catalogs);
     
         return "/catalog/allCatalogs"; // Name of the HTML template (allCatalogs.html)

@@ -7,6 +7,11 @@
     <!-- Include Bootstrap CSS -->
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <style>
         .card-img-top {
             max-height: 200px; /* Set the maximum height for the images */
@@ -20,7 +25,7 @@
     <h2 class="mb-4">All Catalogs</h2>
 
     <div class="container mt-3">
-        <form th:action="@{http://localhost:8080/catalog/search}" method="get">
+        <form th:action="@{/catalog/search}" method="get">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search by Product Name" name="productName">
                 <div class="input-group-append">
@@ -31,7 +36,7 @@
     </div>
     
     <div class="container mt-3">
-        <form th:action="@{http://localhost:8080/catalog/filterByPrice}" method="get">
+        <form th:action="@{/catalog/filterByPrice}" method="get">
             <div class="row">
                 <div class="col-md-4">
                     <label for="minPrice">Min Price:</label>
@@ -49,7 +54,7 @@
     </div>
     
     <div class="container mt-3">
-        <form th:action="@{http://localhost:8080/catalog/sort}" method="get">
+        <form th:action="@{/catalog/sort}" method="get">
             <div class="input-group mb-3">
                 <select class="form-control" name="sortBy">
                     <option value="productName">Product Name</option>
@@ -132,7 +137,7 @@
     function softDeleteProduct(productId) {
         try {
             $.ajax({
-                url: 'http://localhost:8080/catalog/' + productId,
+                url: 'http://localhost:8083/catalog/' + productId,
                 type: 'DELETE',
                 success: function(response) {
                     console.log('Soft Delete Response:', response);

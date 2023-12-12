@@ -79,7 +79,7 @@ public class CatalogController {
         }
     }
 
-    @GetMapping("/allCatalogs")
+    @GetMapping("/all-catalogs")
     public List<ShowCatalogRequestDTO> getAllCatalogsSortedByName() {
         List<Catalog> catalogs = catalogService.findAllSortedByName();
         return catalogs.stream()

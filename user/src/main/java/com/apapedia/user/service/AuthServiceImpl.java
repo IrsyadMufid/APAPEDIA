@@ -117,4 +117,20 @@ public class AuthServiceImpl implements AuthService {
 
         return jwtGenerator.generateToken(username, seller.getId(), seller.getRole().toString());
     }
+
+    @Override
+    public String loginErrorSSO(SSOLoginRequestDTO ssoLoginRequestDTO) {
+        String username = ssoLoginRequestDTO.getUsername();
+
+        Seller seller = sellerDb.findByUsername(username);
+
+        if (seller == null) {
+            return null;
+        } else if (seller.isDeleted()) {
+            return null;
+        }
+        else {
+            return jwtGenerator.generateToken(username, seller.getId(), seller.getRole().toString());
+        }
+    }
 }
