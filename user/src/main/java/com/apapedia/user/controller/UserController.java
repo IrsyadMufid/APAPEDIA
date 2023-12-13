@@ -50,12 +50,12 @@ public class UserController {
     JwtGenerator jwtGenerator;
 
     @GetMapping(value = "/{id}")
-    private UserModel getUserById(@PathVariable("id") String id) {
+    public UserModel getUserById(@PathVariable("id") String id) {
         try {
             return userService.findUserById(UUID.fromString(id));
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -64,10 +64,10 @@ public class UserController {
         try {
             var user = userService.findUserById(UUID.fromString(id));
             userService.deleteUser(user);
-            return ResponseEntity.ok("User with id " + id + " has been deleted");
+            return ResponseEntity.ok(id);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -79,7 +79,7 @@ public class UserController {
             return ResponseEntity.ok(updateUserRequestDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -91,7 +91,7 @@ public class UserController {
             return ResponseEntity.ok(updateUserRequestDTO);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -105,12 +105,12 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance cannot be zero");
             } else {
                 userService.addBalanceUser(id, balance);
-                String responseMessage = String.format("Added %d to %s --> current balance: %d", balance, user.getUsername(),
+                var responseMessage = String.format("Added %d to %s --> current balance: %d", balance, user.getUsername(),
                         user.getBalance());
                 return ResponseEntity.ok(responseMessage);
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -122,12 +122,12 @@ public class UserController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Balance is zero or negative");
             } else {
                 userService.subtractBalanceUser(id, balance);
-                String responseMessage = String.format("Subtracted %d to %s --> current balance: %d", balance, user.getUsername(),
+                var responseMessage = String.format("Subtracted %d to %s --> current balance: %d", balance, user.getUsername(),
                         user.getBalance());
                 return ResponseEntity.ok(responseMessage);
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -144,7 +144,7 @@ public class UserController {
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 
@@ -161,7 +161,7 @@ public class UserController {
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Id User " + id + " not found");
+                    HttpStatus.NOT_FOUND, id);
         }
     }
 }

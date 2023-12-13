@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
     private final WebClient webClient;
-    private final String orderServiceBaseUrl = Setting.CLIENT_ORDER_SERVICE;
+    private final static String orderServiceBaseUrl = Setting.CLIENT_ORDER_SERVICE;
 
     @Autowired
     CustomerDb customerDb;
@@ -33,7 +33,7 @@ public class CustomerService {
     public Customer connectCart(Customer customer) {
         // Make a request to create a new cart
         String url = "/cart/create-cart/" + customer.getId();
-        CartResponse cartResponse = webClient.post()
+        var cartResponse = webClient.post()
                 .uri(url)
                 .retrieve()
                 .bodyToMono(CartResponse.class)

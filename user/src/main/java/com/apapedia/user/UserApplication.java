@@ -27,7 +27,7 @@ public class UserApplication {
 	@Transactional
 	CommandLineRunner generateDummyUser(UserDb userDb, PasswordEncoder passwordEncoder) {
 		return args -> {
-			Admin newUser0 = new Admin();
+			var newUser0 = new Admin();
 			newUser0.setName("Moreno");
 			newUser0.setUsername("Moreno00");
 			newUser0.setEmail("moreno.rassya@gmail.com");
@@ -35,7 +35,7 @@ public class UserApplication {
 			newUser0.setAddress("Mahata Margonda");
 			newUser0.setRole(RoleEnum.Admin);
 			
-			Seller newUser1 = new Seller();
+			var newUser1 = new Seller();
 			newUser1.setName("Jimmi");
 			newUser1.setUsername("Jimmi01");
 			newUser1.setEmail("Jimmi@gmail.com");
@@ -44,7 +44,7 @@ public class UserApplication {
 			newUser1.setRole(RoleEnum.Seller);
 			newUser1.setCategory("Official Store");
 
-			Customer newUser2 = new Customer();
+			var newUser2 = new Customer();
 			newUser2.setName("Angel");
 			newUser2.setUsername("Angel02");
 			newUser2.setEmail("Angel@gmail.com");

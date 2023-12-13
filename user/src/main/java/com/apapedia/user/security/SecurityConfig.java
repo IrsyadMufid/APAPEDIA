@@ -13,26 +13,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .sessionManagement(sessionAuthenticationStrategy -> sessionAuthenticationStrategy
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthEntryPoint))
+                .exceptionHandling(eH -> eH.authenticationEntryPoint(new JwtAuthEntryPoint()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/auth/**").permitAll();
-                    auth.requestMatchers("/api/user/**").hasAnyAuthority("Admin", "Seller", "Customer");
-                    auth.requestMatchers("/api/customer/**").hasAnyAuthority("Admin", "Customer");
-                    auth.requestMatchers("/api/seller/**").hasAnyAuthority("Admin", "Seller");
+                    auth.requestMatchers("/api/user/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable)

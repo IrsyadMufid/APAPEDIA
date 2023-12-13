@@ -22,11 +22,11 @@ public class JwtGenerator {
 
     // Generate token
     public String generateToken(String username, UUID id, String role) {
-        Date currentDate = new Date();
+        var currentDate = new Date();
         // Expires in 5 hours
-        Date expiredDate = new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000);
+        var expiredDate = new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000);
         // Generate token
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username)
                 .claim("id", id.toString())
                 .claim("role", role)
@@ -34,7 +34,6 @@ public class JwtGenerator {
                 .setExpiration(expiredDate)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
-        return token;
     }
 
     // Get username from token

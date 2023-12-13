@@ -13,6 +13,5 @@ public class CartResponse {
     private UUID id;
     private UUID userId;
     private Integer totalPrice;
-    // private List<CartItem> cartItems;
 }
 

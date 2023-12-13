@@ -34,6 +34,7 @@ import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.JwtGenerator;
 import com.apapedia.user.service.AuthService;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.validation.Valid;
 
 @CrossOrigin
@@ -53,21 +54,24 @@ public class AuthController {
     @Autowired
     UserDb userDb;
 
+    public String responseInvalid = "Request body has invalid type or missing field";
+
     @PostMapping(value = "/sign-up")
     public ResponseEntity<String> addNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
         } else {
             var user = authService.register(userDTO);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
 
+    @Nullable
     @PostMapping(value = "/log-in-sso-user")
     public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -81,10 +85,11 @@ public class AuthController {
         }
     }
 
+    @Nullable
     @PostMapping(value = "/log-in")
     public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -98,10 +103,11 @@ public class AuthController {
         }
     }
 
+    @Nullable
     @PostMapping(value = "/log-in-sso")
     public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -137,7 +143,7 @@ public class AuthController {
         UserModel user = userDb.findByUsername(username);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        var userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setName(user.getName());
         userResponseDTO.setUsername(user.getUsername());
@@ -148,14 +154,14 @@ public class AuthController {
         
         if (user.getRole().toString().equals("Customer")) {
             if (user instanceof Customer) {
-                Customer customer = (Customer) user;
+                var customer = (Customer) user;
                 userResponseDTO.setCartId(customer.getCartId());
             } else {
                 throw new IllegalArgumentException("User is not a customer");
             }
         } else if (user.getRole().toString().equals("Seller")) {
             if (user instanceof Seller) {
-                Seller seller = (Seller) user;
+                var seller = (Seller) user;
                 userResponseDTO.setCategory(seller.getCategory());
             } else {
                 throw new IllegalArgumentException("User is not a seller");

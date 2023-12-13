@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
                 return "User already exists with the password.";
             }
             if (createUserDTO.getRole().equals("Seller")) {
-                Seller seller = new Seller();
+                var seller = new Seller();
                 seller.setName(createUserDTO.getName());
                 seller.setUsername(createUserDTO.getUsername());
                 seller.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
                 sellerDb.save(seller);
                 return "Seller created";
             } else if (createUserDTO.getRole().equals("Customer")) {
-                Customer customer = new Customer();
+                var customer = new Customer();
                 customer.setName(createUserDTO.getName());
                 customer.setUsername(createUserDTO.getUsername());
                 customer.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
