@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'APAPEDIA',
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => const HomeScreen(),
         '/login': (context) => const LoginFormScreen(),
-        '/register': (context) => RegisterPage()
+        '/register': (context) => const RegisterPage()
       },
     );
   }

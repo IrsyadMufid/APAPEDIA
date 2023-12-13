@@ -46,7 +46,7 @@ void popUpExit(BuildContext context, String title) async {
                   onPressed: () {
                     {
                       Navigator.pushNamed(context, "/");
-                    };
+                    }
                   },
                   child: const Text('Log Out'),
                 ),

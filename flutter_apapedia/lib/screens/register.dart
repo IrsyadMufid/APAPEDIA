@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key); // Make it const
+ 
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -42,75 +44,87 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> registerUser() async {
-    final response = await http.post(
-      Uri.parse('http://localhost:8081/api/auth/sign-up'),
-      headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers':
-                'Origin, X-Requested-With, Content-Type, Accept'
-          },
-      body: jsonEncode(<String, String>{
-        'name': name,
-        'username': username,
-        'password': password,
-        'email': email,
-        'address': address,
-        'role': role,
-      }),
-    );
+    showLoading(context); // Show loading indicator
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8081/api/auth/sign-up'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers':
+              'Origin, X-Requested-With, Content-Type, Accept'
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'username': username,
+          'password': password,
+          'email': email,
+          'address': address,
+          'role': role,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      if(response == 'User already exists with the username.'){
-        ScaffoldMessenger.of(context).showSnackBar(
+      Navigator.of(context).pop(); // Dismiss loading indicator
+
+      final responseBody = response.body;
+
+      if (response.statusCode == 200) {
+        if (responseBody.contains('Customer created')) {
+          // Proceed to login the user or navigate to the home screen
+          await login(); // Assuming login() method navigates to the HomeScreen after successful login
+          Navigator.of(context).pop();
+        } else if (responseBody.contains('User already exists with the username')) {
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('User already exists with the username.'),
               backgroundColor: Colors.red,
             ),
           );
-      }
-      if(response == 'User already exists with the email.'){
-        ScaffoldMessenger.of(context).showSnackBar(
+        } else if (responseBody.contains('User already exists with the email')) {
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('User already exists with the email.'),
               backgroundColor: Colors.red,
             ),
           );
-      }
-      if(response == 'User already exists with the password.'){
-        ScaffoldMessenger.of(context).showSnackBar(
+        } else if (responseBody.contains('User already exists with the password')) {
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('User already exists with the password.'),
               backgroundColor: Colors.red,
             ),
           );
-      }
-      if(response == 'Customer created') {
-        login();
-        ScaffoldMessenger.of(context).showSnackBar(
+        } else {
+          // Handle any other response
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('User successfully registered.'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomeScreen()));
-      }
-      else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error registering user. Please try again.'),
+              content: Text('Unexpected response: $responseBody'),
               backgroundColor: Colors.red,
             ),
           );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to register user. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
-    } else {
-      // Handle error
-      print('Failed to register user');
+    }
+    catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+    finally {
+      Navigator.of(context).pop(); // This will close the loading dialog
     }
   }
+
 
   Future<void> login() async {
     if (_formKey.currentState!.validate()) {

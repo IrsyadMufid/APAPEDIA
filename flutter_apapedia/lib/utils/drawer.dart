@@ -4,12 +4,13 @@ import 'package:flutter_apapedia/screens/login.dart';
 import 'package:flutter_apapedia/screens/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class CustomDrawer extends StatelessWidget {
   final Future<String?> token = SharedPreferences.getInstance().then((prefs) {
     return prefs.getString('token');
   });
+
+  CustomDrawer({Key? key});
 
   Future<void> _logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
@@ -32,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
         await prefs.remove('activeUserId');
         Navigator.pop(context); // Close the drawer
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginFormScreen()));
+            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
       } else {
         // Handle error here
         print('Logout failed');
@@ -47,10 +48,10 @@ class CustomDrawer extends StatelessWidget {
       builder: (context, snapshot) {
         List<Widget> drawerOptions = [
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
             },
           ),
         ];
@@ -59,17 +60,17 @@ class CustomDrawer extends StatelessWidget {
           // User is not logged in
           drawerOptions.addAll([
             ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Login'),
+              leading: const Icon(Icons.login),
+              title: const Text('Login'),
               onTap: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginFormScreen()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.app_registration),
-              title: Text('Register'),
+              leading: const Icon(Icons.app_registration),
+              title: const Text('Register'),
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
               },
             ),
           ]);
@@ -77,8 +78,8 @@ class CustomDrawer extends StatelessWidget {
           // User is logged in
           drawerOptions.add(
             ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Logout'),
               onTap: () => _logout(context),
             ),
           );

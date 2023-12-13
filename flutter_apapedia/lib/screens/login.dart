@@ -55,17 +55,17 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
           prefs.setString('token', token);
 
           await Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
         } if (responseData['accessToken'] == 'Wrong password') {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Wrong password for that user!'),
               backgroundColor: Colors.red,
             ),
           );
         } if (responseData['accessToken'] == 'User not found') {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('User not found!'),
               backgroundColor: Colors.red,
             ),
@@ -74,7 +74,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         else {
           // This handles both wrong credentials and the specific 'Wrong password' accessToken
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Login failed. Please check your credentials.'),
               backgroundColor: Colors.red,
             ),
@@ -82,7 +82,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         }
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Error. Please try again.'),
             backgroundColor: Colors.red,
           ),
@@ -109,10 +109,10 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),

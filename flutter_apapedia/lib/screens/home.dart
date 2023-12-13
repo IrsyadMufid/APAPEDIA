@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -14,9 +16,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    Text('Home Screen'),
-    LoginFormScreen(),
-    RegisterPage(),
+    const Text('Home Screen'),
+    const LoginFormScreen(),
+    const RegisterPage(),
   ];
   Map<String, dynamic>? userData;
   bool isLoading = true;
@@ -73,14 +75,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Loading...')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Loading...')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'APAPEDIA',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // More user details
                 ],
               )
-            : Icon(Icons.add_shopping_cart, size: 200.0),
+            : const Icon(Icons.add_shopping_cart, size: 200.0),
       ),
     );
   }
