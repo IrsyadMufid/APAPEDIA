@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Order - APAPEDIA</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar (activeFragment='order')}"></nav>
+
+<div style="width: 80%; margin: auto; padding-top: 20px;">
+
+    <h2 th:text="'Order History for User ID: ' + ${activeUserId}"></h2>
+
+    <!-- Display success message if present -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <div th:each="order : ${orders}">
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-body">
+                <h5 class="card-title">Order ID: <span th:text="${order.id}"></span></h5>
+                <p class="card-text">Created At: <span th:text="${order.createdAt}"></span></p>
+                <p class="card-text">Updated At: <span th:text="${order.updatedAt}"></span></p>
+                <p>Status:
+                    <span th:utext="${order.status == 0 ? 'Menunggu konfirmasi penjual' :
+                                       order.status == 1 ? 'Dikonfirmasi penjual' :
+                                       order.status == 2 ? 'Menunggu kurir' :
+                                       order.status == 3 ? 'Dalam perjalanan' :
+                                       order.status == 4 ? 'Barang diterima' :
+                                       order.status == 5 ? 'Selesai' :
+                                       'Unknown status'}">
+                    </span>
+                </p>
+                <p class="card-text">Total Price: <span th:text="${order.totalPrice}"></span></p>
+                <p class="card-text">Customer ID: <span th:text="${order.customer}"></span></p>
+                <p class="card-text">Seller ID: <span th:text="${order.seller}"></span></p>
+                
+                <!-- Button to update status -->
+                <form th:action="@{'/order/' + ${order.id} + '/update-status'}" method="post">
+                    <input type="hidden" name="status" th:value="${order.status}" />
+                    <button type="submit" class="btn btn-primary" th:if="${order.status >= 0 && order.status <= 2}">
+                        Update Status
+                    </button>
+                    <button type="button" class="btn btn-primary" disabled="disabled" th:unless="${order.status >= 0 && order.status <= 2}">
+                        Update Status
+                    </button>
+                </form>
+
+                <!-- Button to update status -->
+                <!-- <a th:href="@{/order/{orderId}/update-status(orderId=${order.id}, status=${order.status})}"
+                    class="btn btn-primary"
+                    th:if="${order.status >= 0 && order.status <= 2}">
+                        Update Status
+                </a>
+                <button class="btn btn-primary" disabled="disabled" th:unless="${order.status >= 0 && order.status <= 2}">
+                    Update Status
+                </button> -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add Bootstrap JS and Popper.js for button functionality -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<!-- Add your additional scripts here -->
+
+</body>
+</html>
