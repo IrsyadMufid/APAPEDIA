@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_apapedia/screens/profile/profile_page.dart';
 import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/screens/login.dart';
 import 'package:flutter_apapedia/screens/register.dart';
@@ -10,7 +11,6 @@ class CustomDrawer extends StatelessWidget {
     return prefs.getString('token');
   });
 
-  CustomDrawer({Key? key});
 
   Future<void> _logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
@@ -76,6 +76,15 @@ class CustomDrawer extends StatelessWidget {
           ]);
         } else {
           // User is logged in
+          drawerOptions.add(
+            ListTile(
+              leading: const Icon(Icons.verified_user),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+              },
+            ),
+          );
           drawerOptions.add(
             ListTile(
               leading: const Icon(Icons.exit_to_app),

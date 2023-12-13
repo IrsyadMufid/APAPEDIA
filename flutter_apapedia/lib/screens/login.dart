@@ -53,7 +53,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
           final token = responseData['accessToken'];
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('token', token);
-
+        
           await Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => const HomeScreen()));
         } if (responseData['accessToken'] == 'Wrong password') {
@@ -89,6 +89,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         );
       } finally {
         Navigator.of(context).pop(); // This will close the loading dialog
+        Navigator.of(context).pop(); // This will close the login screen
       }
     }
   }

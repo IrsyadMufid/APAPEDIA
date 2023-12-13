@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
+  static const routeName = '/register';
   const RegisterPage({Key? key}) : super(key: key); // Make it const
  
   @override
@@ -122,6 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     finally {
       Navigator.of(context).pop(); // This will close the loading dialog
+      Navigator.of(context).pop(); // This will close the register screen
     }
   }
 

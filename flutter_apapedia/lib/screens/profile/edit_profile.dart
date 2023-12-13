@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_apapedia/screens/profile/profile_page.dart';
+import 'package:flutter_apapedia/utils/drawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatelessWidget {
   @override
@@ -24,7 +29,6 @@ class EditProfilePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   _buildTextField(hint: 'Name'),
-                  _buildTextField(hint: 'Username'),
                   _buildTextField(hint: 'Email'),
                   _buildTextField(hint: 'Password', obscureText: true),
                   _buildTextField(hint: 'Address'),
