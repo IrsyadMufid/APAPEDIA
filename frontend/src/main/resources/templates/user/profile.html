@@ -1,66 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Profile - APAPEDIA</title>
+    <style>
+        .card {
+            max-width: 700px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            background: #c4c4c9;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            /* Stack children vertically */
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            /* Space between label and input */
+            align-items: center;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .form-group label {
+            flex-basis: 30%;
+            /* Allocate 30% of space to label */
+            margin-right: 10px;
+            /* Space between label and input */
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            /* Fill the remaining space */
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h5,
+        .info-section p,
+        .info-section hr {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            /* Space between buttons */
+            text-decoration: none;
+            /* Remove underline from anchors */
+        }
+
+        .btn-info {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: red;
+            color: white;
+        }
+
+        .btn:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .text-center {
+            text-align: center;
+            width: 100%;
+            padding-top: 10px;
+        }
+
+        .balance-info {
+            text-align: left;
+            padding: 10px 0;
+        }
+    </style>
 </head>
 
 <body>
     <nav th:replace="~{fragments/navbar :: navbar (activeFragment='profile')}"></nav>
     <div class="container pt-5">
         <div class="card mx-auto">
-          <h2 class="card-header pt-2 text-center">Profile</h2>
-            <div class="card-body">
-              <div class="justify-content-center">
-                <div class="d-flex justify-content-center">
-                <shopicon-bold-account size="xl"></shopicon-bold-account>
-                </div>
-                <br>
-
-                Name: <br>
-                <input class="form-control" type="text" th:field="*{user.name}" disabled />
-                <br>
-
-                Email: <br>
-                <input class="form-control" type="text" th:field="*{user.email}" disabled />
-                <br>
-
-                Address: <br>
-                <input class="form-control" type="text" th:field="*{user.address}" disabled />
-                <br>
-
-                Category: <br>
-                <select class="form-control" th:field="*{user.category}" disabled>
-                <option th:value="Official-Store">Official Store</option>
-                <option th:value="Biasa">Biasa</option>
-                </select>
-                <br>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Edit Profile</a>
-                </div>
-
-                <strong>APAPAY</strong> Balance: <br>
-                <input required class="form-control" type="number" th:field="*{user.balance}" disabled />
-                <br>
-                
-                <div class="text-center">
-                    <a class="btn btn-info" th:href="@{/user/profile/withdraw/{id}(id=${user.id})}">Withdraw <strong>APAPAY</strong></a>
-                    <br><br>
-                </div>
-            
-                <div class="text-center">
-                    <a class="btn btn-danger" th:href="@{/user/profile/delete/{id}(id=${user.id})}">Delete Account</a>
-                </div>
-                <br>
-                <div class="text-center">
-                    <a class="btn btn-secondary" th:href="@{/logout-sso}">Sign Out</a>
-                </div>
+            <div class="card-header text-center">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="Avatar"
+                    style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px;">
+                <h5 class="card-text" th:text="${user.name}">Name</h5>
+                <p class="card-text" th:text="${user.username}">Username</p>
+                <a class="btn btn-primary" th:href="@{/user/profile/edit/{id}(id=${user.id})}">Edit Profile</a>
             </div>
+            <div class="card-body">
+                <div class="info-section">
+                    <h5>Information</h5>
+                    <hr>
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input class="form-control" type="text" id="id" th:value="${user.id}" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <p id="email" th:text="${user.email}">Email</p>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label for="password">Password:</label>
+                        <p id="password">*****</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <p id="address" th:text="${user.address}">Address</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" class="form-control" th:field="${user.category}" disabled>
+                            <option th:value="Official-Store">Official Store</option>
+                            <option th:value="Biasa">Biasa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="balance-info">
+                    <h5>APAP-PAY</h5>
+                    <hr>
+                    <p><strong>Balance:</strong> <span th:text="${user.balance}">
+                </div>
+                <div class="text-center mt-3">
+                    <a class="btn btn-info" th:href="@{/user/profile/withdraw/{id}(id=${user.id})}">Withdraw</a>
+                    <a class="btn btn-danger" th:href="@{/logout}">Sign Out</a>
+                    <a class="btn btn-danger" th:href="@{/user/profile/delete/{id}(id=${user.id})}">Delete Account</a>
+
+                </div>
             </div>
         </div>
-        <br>
     </div>
 </body>

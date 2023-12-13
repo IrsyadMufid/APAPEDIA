@@ -33,9 +33,6 @@ public class AuthController {
     @GetMapping("")
     public String home(Model model, HttpServletRequest request){
         if (request.getSession().getAttribute("accessToken") != null){
-            var token = (String) request.getSession().getAttribute("accessToken");
-            var activeUser = authService.getActiveUser(token);
-            request.getSession().setAttribute("activeUserId", activeUser.getId());
             model.addAttribute("activeUserId", request.getSession().getAttribute("activeUserId"));
         }
         
@@ -71,8 +68,10 @@ public class AuthController {
         httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
         httpSession.setAttribute("accessToken", token);
         httpSession.setAttribute("loginSSO", true);
+        var activeUser = authService.getActiveUser(token);
+        httpSession.setAttribute("activeUserId", activeUser.getId());
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/user/profile/edit/" + activeUser.getId());
     }
 
     @GetMapping("/validate-ticket-login")
@@ -100,6 +99,8 @@ public class AuthController {
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("accessToken", token);
             httpSession.setAttribute("loginSSO", true);
+            var activeUser = authService.getActiveUser(token);
+            httpSession.setAttribute("activeUserId", activeUser.getId());
             return new ModelAndView("redirect:/");
         } else {
             request.getSession().invalidate();
