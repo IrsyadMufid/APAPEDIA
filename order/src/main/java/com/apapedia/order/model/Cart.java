@@ -1,18 +1,13 @@
 package com.apapedia.order.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "cart")
-
 public class Cart {
     @Id
     private UUID id = UUID.randomUUID();
@@ -36,5 +30,6 @@ public class Cart {
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CartItem> cartItems = new ArrayList<>();
 }

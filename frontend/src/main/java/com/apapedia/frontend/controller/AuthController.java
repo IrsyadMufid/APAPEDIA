@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.apapedia.frontend.dto.user.request.CreateUserRequestDTO;
 import com.apapedia.frontend.security.xml.Attributes;
 import com.apapedia.frontend.security.xml.ServiceResponse;
 import com.apapedia.frontend.service.AuthService;

@@ -7,13 +7,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.frontend.dto.user.request.UpdateUserRequestDTO;
 import com.apapedia.frontend.dto.user.response.ReadUserResponseDTO;
+import com.apapedia.frontend.setting.Setting;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final WebClient webClient;
 
     public UserServiceImpl(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.CLIENT_USER_SERVICE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }

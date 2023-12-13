@@ -7,10 +7,10 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.apapedia.order.model.CartItem;
+import com.apapedia.order.model.OrderItem;
 
 @Repository
 @Transactional
-public interface CartItemDb extends JpaRepository<CartItem, UUID> {
-
+public interface OrderItemDb extends JpaRepository<OrderItem, UUID> {
+    
 }

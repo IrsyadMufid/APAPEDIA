@@ -9,13 +9,14 @@ import com.apapedia.frontend.dto.auth.request.AuthRequestDTO;
 import com.apapedia.frontend.dto.auth.response.JwtResponseDTO;
 import com.apapedia.frontend.dto.user.request.SSOLoginRequestDTO;
 import com.apapedia.frontend.dto.user.response.ReadUserResponseDTO;
+import com.apapedia.frontend.setting.Setting;
 
 @Service
 public class AuthServiceImpl implements AuthService {
     private final WebClient webClient;
 
     public AuthServiceImpl(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.CLIENT_USER_SERVICE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
