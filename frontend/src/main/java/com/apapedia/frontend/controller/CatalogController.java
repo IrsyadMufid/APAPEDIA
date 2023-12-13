@@ -19,11 +19,8 @@ import java.util.UUID;
 
 import com.apapedia.frontend.dto.catalog.response.UpdateCatalogResponseDTO;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
 
 @CrossOrigin(origins = "http://localhost:8083")
 @Controller
@@ -35,7 +32,7 @@ public class CatalogController {
     @GetMapping("/create")
     public String showAddCatalogForm(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        model.addAttribute("createCatalogRequestDTO", new CreateCatalogRequestDTO());
+        model.addAttribute("createCatalogRequestDTO", new UpdateCatalogResponseDTO());
 
         var id = (UUID) session.getAttribute("activeUserId");
 

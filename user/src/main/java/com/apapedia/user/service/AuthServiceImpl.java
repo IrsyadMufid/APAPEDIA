@@ -39,8 +39,17 @@ public class AuthServiceImpl implements AuthService {
     JwtGenerator jwtGenerator;
 
     @Override
-    public UserModel register(CreateUserRequestDTO createUserDTO) {
+    public String register(CreateUserRequestDTO createUserDTO) {
         if (createUserDTO != null) {
+            if (userDb.findByUsername(createUserDTO.getUsername() ) != null) {
+                return "User already exists with the username.";
+            }
+            if (userDb.findByEmail(createUserDTO.getEmail()) != null) {
+                return "User already exists with the email.";
+            }
+            if (userDb.findByPassword(passwordEncoder.encode(createUserDTO.getPassword())) != null) {
+                return "User already exists with the password.";
+            }
             if (createUserDTO.getRole().equals("Seller")) {
                 Seller seller = new Seller();
                 seller.setName(createUserDTO.getName());
@@ -51,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
                 seller.setRole(RoleEnum.Seller);
                 seller.setCategory(createUserDTO.getCategory());
                 sellerDb.save(seller);
-                return seller;
+                return "Seller created";
             } else if (createUserDTO.getRole().equals("Customer")) {
                 Customer customer = new Customer();
                 customer.setName(createUserDTO.getName());
@@ -61,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
                 customer.setAddress(createUserDTO.getAddress());
                 customer.setRole(RoleEnum.Customer);
                 customerDb.save(customer);
-                return customer;
+                return "Customer created";
             }
         }
         return null;

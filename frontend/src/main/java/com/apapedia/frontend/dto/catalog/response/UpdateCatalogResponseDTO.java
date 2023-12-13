@@ -21,4 +21,5 @@ public class UpdateCatalogResponseDTO {
     private Integer stock;
     private String imageBase64;
     private ShowCategoryRequestDTO category;
+    private UUID sellerId;
 }

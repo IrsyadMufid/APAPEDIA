@@ -15,4 +15,6 @@ public interface UserDb extends JpaRepository <UserModel, UUID> {
     UserModel findByUsername(String username);
 
     UserModel findByEmail(String email);
+
+    UserModel findByPassword(String password);
 }

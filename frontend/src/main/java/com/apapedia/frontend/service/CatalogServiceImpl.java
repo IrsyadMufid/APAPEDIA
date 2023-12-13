@@ -7,7 +7,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
-import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogListResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogResponseDTO;
 

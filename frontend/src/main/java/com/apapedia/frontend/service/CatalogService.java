@@ -2,7 +2,6 @@ package com.apapedia.frontend.service;
 
 import java.util.List;
 
-import com.apapedia.frontend.dto.catalog.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogListResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogResponseDTO;
 
