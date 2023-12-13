@@ -17,13 +17,12 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
     private final WebClient webClient;
-    private final static String orderServiceBaseUrl = Setting.CLIENT_ORDER_SERVICE;
 
     @Autowired
     CustomerDb customerDb;
 
     public CustomerService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(orderServiceBaseUrl).build();
+        this.webClient = webClientBuilder.baseUrl(Setting.CLIENT_ORDER_SERVICE).build();
     }
 
     public Customer getCustomerById(UUID id){

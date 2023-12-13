@@ -54,13 +54,13 @@ public class AuthController {
     @Autowired
     UserDb userDb;
 
-    public String responseInvalid = "Request body has invalid type or missing field";
+    public static final String RESPONSE_INVALID = "Request body has invalid type or missing field";
 
     @PostMapping(value = "/sign-up")
     public ResponseEntity<String> addNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
             var user = authService.register(userDTO);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class AuthController {
     @PostMapping(value = "/log-in-sso-user")
     public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -89,7 +89,7 @@ public class AuthController {
     @PostMapping(value = "/log-in")
     public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -107,7 +107,7 @@ public class AuthController {
     @PostMapping(value = "/log-in-sso")
     public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseInvalid);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
             try {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
