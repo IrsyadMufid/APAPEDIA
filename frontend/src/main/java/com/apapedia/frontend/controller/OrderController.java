@@ -67,7 +67,7 @@ public class OrderController {
         model.addAttribute("orders", orders);       
         model.addAttribute("activeUserId", id);
         model.addAttribute("user", user);        
-        return "order/order-history-seller";
+        return "/order/order-history-seller";
     }
 
     @PostMapping("/{orderId}/update-status")

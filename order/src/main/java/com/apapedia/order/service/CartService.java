@@ -15,9 +15,9 @@ import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.repository.CartDb;
 import com.apapedia.order.repository.CartItemDb;
+import com.apapedia.order.setting.Setting;
+
 import jakarta.transaction.Transactional;
-
-
 
 @Service
 public class CartService {
@@ -29,7 +29,7 @@ public class CartService {
     CartItemDb cartItemDb;
 
     private final WebClient webClient;
-    private final String catalogServiceBaseUrl = "http://localhost:8083/";
+    private final String catalogServiceBaseUrl = Setting.CLIENT_CATALOG_SERVICE;
 
     public CartService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl(catalogServiceBaseUrl).build();

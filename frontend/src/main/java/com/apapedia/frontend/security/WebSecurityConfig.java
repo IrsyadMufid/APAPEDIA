@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -36,6 +37,12 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/logout-sso")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/catalog/all")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/search")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/filterByPrice")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/sort")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/detail/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/**")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/order/**")).authenticated()
                 .anyRequest().authenticated()
             )
             .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -69,5 +76,10 @@ public class WebSecurityConfig {
                     .allowCredentials(true);
             }
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

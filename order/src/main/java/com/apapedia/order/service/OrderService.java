@@ -30,6 +30,8 @@ import com.apapedia.order.repository.CartDb;
 import com.apapedia.order.repository.CartItemDb;
 import com.apapedia.order.repository.OrderDb;
 import com.apapedia.order.repository.OrderItemDb;
+import com.apapedia.order.setting.Setting;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -50,9 +52,9 @@ public class OrderService {
     private final WebClient webClient;
     private final WebClient webClientOrder;
     private final WebClient webClientUser;
-    private final String catalogServiceBaseUrl = "http://localhost:8083/";
-    private final String orderServiceBaseUrl = "http://localhost:8082/";
-    private final String userServiceBaseUrl = "http://localhost:8081/";
+    private final String catalogServiceBaseUrl = Setting.CLIENT_CATALOG_SERVICE;
+    private final String orderServiceBaseUrl = Setting.CLIENT_ORDER_SERVICE;
+    private final String userServiceBaseUrl = Setting.CLIENT_USER_SERVICE;
 
 
     public OrderService(WebClient.Builder webClientBuilder) {

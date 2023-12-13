@@ -24,11 +24,14 @@
     </button>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item" th:if="${session == null || session.accessToken == null}">
           <a class="nav-link" th:classappend="${activeFragment == 'catalog'} ? 'active' : ''" th:href="@{/catalog/all}">Catalog</a>
         </li>
         <li class="nav-item" th:if="${session != null && session.accessToken != null}">
-          <a class="nav-link" th:classappend="${activeFragment == 'orders'} ? 'active' : ''" th:href="@{/orders/view-all}">Order History</a>
+          <a class="nav-link" th:classappend="${activeFragment == 'catalog'} ? 'active' : ''" th:href="@{/catalog/all-seller/{id}(id=*{activeUserId})}">Catalog</a>
+        </li>
+        <li class="nav-item" th:if="${session != null && session.accessToken != null}">
+          <a class="nav-link" th:classappend="${activeFragment == 'orders'} ? 'active' : ''" th:href="@{/order/view-all/{id}(id=*{activeUserId})}">Order History</a>
         </li>
         <li class="nav-item" th:if="${session != null && session.accessToken != null}">
           <a class="nav-link" th:classappend="${activeFragment == 'profile'} ? 'active' : ''" th:href="@{/user/profile/{id}(id=*{activeUserId})}">Profile</a>

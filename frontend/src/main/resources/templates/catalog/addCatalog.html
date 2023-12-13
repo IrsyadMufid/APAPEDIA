@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Menginclude file css dan js dari fragment common.html -->
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>Add Catalog</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar (activeFragment='catalog')}"></nav>
+    <div class="container mt-5">
+        <h2>Add Catalog</h2>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <form id="addCatalogForm" action="http://localhost:8083/catalog/create-catalog" method="post" enctype="multipart/form-data" th:object="${createCatalogFormModel}" class="mt-4">
+            <input class="form-control" type="text" th:field="*{sellerId}" hidden/>
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" name="productName" th:field="*{productName}" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" th:field="*{price}" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Product Description:</label>
+                <textarea id="productDescription" name="productDescription" th:field="*{productDescription}" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" th:field="*{stock}" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" th:field="*{categoryId}" required="required">
+                    <!-- Mengisi dropdown dengan daftar kategori -->
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+            </div>
+            
+
+            <div class="form-group">
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="file" accept=".jpg, .jpeg, .png" class="form-control-file">
+            </div>
+
+            <button type="button" onclick="submitForm()" class="btn btn-primary">Add Product</button>
+        </form>
+        <div class="modal fade" id="responseModal" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="responseModalLabel">Response</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="responseModalBody">
+                        <!-- Response content will be displayed here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- Add Home button -->
+                        <button type="button" class="btn btn-primary" onclick="goHome()">Home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            function submitForm() {
+                try {
+                    var form = $('#addCatalogForm')[0];
+                    var formData = new FormData(form);
+        
+                    $.ajax({
+                        url: form.action,
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response, status, xhr) {
+                            console.log('Response Status:', status);
+                            console.log('Response Headers:', xhr.getAllResponseHeaders());
+                            console.log('Response Text:', xhr.responseText);
+        
+                            if (response && response.successMessage) {
+                                // Display response in the modal
+                                $('#responseModalBody').html(response.successMessage);
+        
+                                // Show Bootstrap modal
+                                $('#responseModal').modal('show');
+                            } else {
+                                // Handle unexpected response format
+                                showAlert('danger', 'Unexpected response format');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('XHR Status:', status);
+                            console.error('XHR Error:', error);
+                            console.log('Response Text:', xhr.responseText);
+        
+                            var errorMessage = JSON.parse(xhr.responseText);
+        
+                            // Handle validation errors (if any)
+                            if (errorMessage.errors) {
+                                // Hapus pesan error sebelumnya (jika ada)
+                                $('.alert-danger').remove();
+        
+                                $.each(errorMessage.errors, function(key, value) {
+                                    // Display error messages next to the corresponding form fields
+                                    $('#' + key).after('<div class="alert alert-danger">' + value + '</div>');
+                                });
+                            } else {
+                                // Display error in the modal
+                                $('#responseModalBody').html('Error processing the request');
+        
+                                // Show Bootstrap modal
+                                $('#responseModal').modal('show');
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        
+            function showAlert(type, message) {
+                var alertDiv = $('<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span></button>' + message + '</div>');
+        
+                // Append the alert to the container
+                $('.container').append(alertDiv);
+        
+                // Automatically close the alert after 5 seconds
+                setTimeout(function() {
+                    alertDiv.alert('close');
+                }, 5000);
+            }
+        
+            // Function to go home
+            function goHome() {
+                // Redirect to the home page or update with your desired home URL
+                window.location.href = '/catalog/all-seller/ + ${sellerId}';
+            }
+            /*]]>*/
+        </script>
+    </div>
+</body>
+</html>

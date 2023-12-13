@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog Details</title>
+
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar (activeFragment='catalog')}"></nav>
+    <div class="container mt-4">
+        <h2 class="mb-4">Catalog Details</h2>
+
+        <div class="row">
+            <dd class="col-md-6">
+                <img th:src="'data:image/jpeg;base64,' + ${catalog.imageBase64}" alt="Product Image" class="img-fluid"/>
+            </dd>   
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Product Name:</dt>
+                    <dd class="col-sm-8 font-weight-bold" th:text="${catalog.productName}"></dd>
+                    
+                    <dt class="col-sm-4">Price:</dt>
+                    <dd class="col-sm-8 text-success" th:text="${catalog.price}"></dd>
+                    
+                    <dt class="col-sm-4">Product Description:</dt>
+                    <dd class="col-sm-8" th:text="${catalog.productDescription}"></dd>
+                    
+                    <dt class="col-sm-4">Stock:</dt>
+                    <dd class="col-sm-8" th:text="${catalog.stock}"></dd>
+                    
+                    <dt class="col-sm-4">Category:</dt>
+                    <dd class="col-sm-8 text-info" th:text="${catalog.category.name}"></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
