@@ -8,6 +8,7 @@ import com.apapedia.catalog.mapper.CatalogMapper;
 import com.apapedia.catalog.dto.CreateCatalogRequestDTO;
 // import com.apapedia.catalog.dto.CatalogMapper;
 import com.apapedia.catalog.model.Catalog;
+import com.apapedia.catalog.repository.CatalogDb;
 import com.apapedia.catalog.service.CatalogService;
 import com.apapedia.catalog.service.CategoryService;
 import com.apapedia.catalog.repository.CatalogDb;

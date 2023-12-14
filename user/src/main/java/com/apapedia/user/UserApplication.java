@@ -52,7 +52,6 @@ public class UserApplication {
 			newUser2.setPassword(passwordEncoder.encode("secret101"));
 			newUser2.setAddress("Gedung Baru");
 			newUser2.setRole(RoleEnum.CUSTOMER);
-			newUser2.setCartId(UUID.randomUUID());
 
 			// userDb.save(newUser0);
 			// userDb.save(newUser1);

@@ -1,6 +1,7 @@
 package com.apapedia.frontend.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,10 +37,10 @@ public class OrderController {
     }
 
     @GetMapping("/chart-sales/{id}")
-    public String getSalesChart(@PathVariable String id, Model model) {
+    public String getSalesChart(@PathVariable String id, @RequestParam(name = "productId") UUID productId, Model model) {
         List<ChartDataDTO> listResponse = 
             webClient.get()
-                .uri("/selling-data/{sellerId}", id)
+                .uri("/selling-data/{sellerId}?productId=" + productId)
                 .retrieve()
                 .bodyToFlux(ChartDataDTO.class)
                 .collectList()
@@ -58,7 +59,7 @@ public class OrderController {
         var user = userService.getUserById(id, token);
         List<OrderDTO> orders = 
             webClient.get()
-                .uri("/history-seller/{sellerId}", id)
+                .uri("/history-seller/" + id)
                 .retrieve()
                 .bodyToFlux(OrderDTO.class)
                 .collectList()

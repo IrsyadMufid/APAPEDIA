@@ -333,16 +333,17 @@ public class OrderService {
         }
     }
 
-    public List<ChartDataDTO> getQuantitySoldPerDay(UUID sellerId) {
+    public List<ChartDataDTO> getQuantitySoldPerDay(UUID sellerId, UUID itemId) {
         // Fetch orders for the specified seller from the repository
         List<Order> orders = orderDb.findBySeller(sellerId);
      
-        // Group orders by date and sum the quantity sold
+        // Group orders by date and sum the quantity sold for the specified item
         Map<LocalDate, Integer> quantitySoldPerDay = orders.stream()
                 .filter(order -> order.getCreatedAt() != null) // Filter out orders without a created date
                 .collect(Collectors.groupingBy(
                        order -> order.getCreatedAt().toLocalDate(),
                        Collectors.summingInt(order -> order.getOrderItems().stream()
+                               .filter(orderItem -> orderItem.getProductId().equals(itemId)) // Filter by item ID
                                .mapToInt(OrderItem::getQuantity)
                                .sum())
                 ));
