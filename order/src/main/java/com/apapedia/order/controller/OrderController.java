@@ -81,8 +81,10 @@ public class OrderController {
     }
 
     @GetMapping(value = "/selling-data/{sellerId}")
-    public List<ChartDataDTO> retrieveCartItems(@PathVariable("sellerId") UUID sellerId) {
-        List<ChartDataDTO> data = orderService.getQuantitySoldPerDay(sellerId);
+    public List<ChartDataDTO> retrieveCartItems(
+    @PathVariable("sellerId") UUID sellerId, 
+    @RequestParam(name = "productId") UUID productId) {
+        List<ChartDataDTO> data = orderService.getQuantitySoldPerDay(sellerId, productId);
         return data;
     }
 
