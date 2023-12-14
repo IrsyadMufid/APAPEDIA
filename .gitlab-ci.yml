@@ -203,3 +203,6 @@ deploy:
     - rsync -rahv $CI_PROJECT_DIR/frontend/.env "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/tk-apap-24/frontend/"
     - rsync -rahv $CI_PROJECT_DIR/docker-compose-deploy.yml "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/tk-apap-24/"
     - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "cd ~/tk-apap-24/ && docker-compose -f docker-compose-deploy.yml down && docker-compose -f docker-compose-deploy.yml pull && docker-compose -f docker-compose-deploy.yml up -d"
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "docker exec tk-apap-24 psql -U postgres -c \"CREATE DATABASE apapedia-user;\""
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "docker exec tk-apap-24 psql -U postgres -c \"CREATE DATABASE apapedia-order;\""
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "docker exec tk-apap-24 psql -U postgres -c \"CREATE DATABASE apapedia-catalog;\""
