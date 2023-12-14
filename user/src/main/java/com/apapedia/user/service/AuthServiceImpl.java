@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
                 seller.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
                 seller.setEmail(createUserDTO.getEmail());
                 seller.setAddress(createUserDTO.getAddress());
-                seller.setRole(RoleEnum.Seller);
+                seller.setRole(RoleEnum.SELLER);
                 seller.setCategory(createUserDTO.getCategory());
                 sellerDb.save(seller);
                 return "Seller created";
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
                 customer.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
                 customer.setEmail(createUserDTO.getEmail());
                 customer.setAddress(createUserDTO.getAddress());
-                customer.setRole(RoleEnum.Customer);
+                customer.setRole(RoleEnum.CUSTOMER);
                 customerDb.save(customer);
                 return "Customer created";
             }
@@ -118,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
             seller.setUsername(username);
             seller.setEmail(username + "@ui.ac.id");
             seller.setAddress("Placeholder Alamat");
-            seller.setRole(RoleEnum.Seller);
+            seller.setRole(RoleEnum.SELLER);
             seller.setCategory("Official Store");
             sellerDb.save(seller);
         }

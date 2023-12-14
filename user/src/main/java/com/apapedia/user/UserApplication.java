@@ -33,7 +33,7 @@ public class UserApplication {
 			newUser0.setEmail("moreno.rassya@gmail.com");
 			newUser0.setPassword(passwordEncoder.encode("secret99"));
 			newUser0.setAddress("Mahata Margonda");
-			newUser0.setRole(RoleEnum.Admin);
+			newUser0.setRole(RoleEnum.ADMIN);
 			
 			var newUser1 = new Seller();
 			newUser1.setName("Jimmi");
@@ -41,7 +41,7 @@ public class UserApplication {
 			newUser1.setEmail("Jimmi@gmail.com");
 			newUser1.setPassword(passwordEncoder.encode("secret100"));
 			newUser1.setAddress("Gedung Lama");
-			newUser1.setRole(RoleEnum.Seller);
+			newUser1.setRole(RoleEnum.SELLER);
 			newUser1.setCategory("Official Store");
 
 			var newUser2 = new Customer();
@@ -50,7 +50,7 @@ public class UserApplication {
 			newUser2.setEmail("Angel@gmail.com");
 			newUser2.setPassword(passwordEncoder.encode("secret101"));
 			newUser2.setAddress("Gedung Baru");
-			newUser2.setRole(RoleEnum.Customer);
+			newUser2.setRole(RoleEnum.CUSTOMER);
 			newUser2.setCartId(UUID.randomUUID());
 
 			userDb.save(newUser0);

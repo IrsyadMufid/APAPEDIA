@@ -135,7 +135,7 @@ public class UserController {
     public ResponseEntity<String> addCart(@PathVariable("id") String id, @PathVariable("cartId") String cartId) {
         try {
             var user = userService.findCustomerById(UUID.fromString(id));
-            if (user.getRole().equals(RoleEnum.Customer)) {
+            if (user.getRole().equals(RoleEnum.CUSTOMER)) {
                 user.setCartId(UUID.fromString(cartId));
                 return ResponseEntity.ok("Cart has been added");
             }
@@ -152,7 +152,7 @@ public class UserController {
     public ResponseEntity<String> deleteCart(@PathVariable("id") String id) {
         try {
             var user = userService.findCustomerById(UUID.fromString(id));
-            if (user.getRole().equals(RoleEnum.Customer)) {
+            if (user.getRole().equals(RoleEnum.CUSTOMER)) {
                 user.setCartId(null);
                 return ResponseEntity.ok("Cart has been deleted");
             }

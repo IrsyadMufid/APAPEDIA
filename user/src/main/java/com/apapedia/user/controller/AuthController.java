@@ -33,7 +33,6 @@ import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.JwtGenerator;
 import com.apapedia.user.service.AuthService;
-import io.micrometer.common.lang.Nullable;
 import jakarta.validation.Valid;
 
 @CrossOrigin
@@ -54,6 +53,8 @@ public class AuthController {
     UserDb userDb;
 
     public static final String RESPONSE_INVALID = "Request body has invalid type or missing field";
+    public static final String RESPONSE_UNAUTHORIZED = "Authentication failed";
+    
     @PostMapping(value = "/sign-up")
     public ResponseEntity<String> addNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO,
             BindingResult bindingResult) {
@@ -65,7 +66,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/log-in-sso-user")
-    public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, @Nullable BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
@@ -76,14 +77,14 @@ public class AuthController {
                 String jwtToken = authService.loginErrorSSO(ssoLoginRequestDTO);
                 return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
             } catch (AuthenticationException e) {
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, RESPONSE_UNAUTHORIZED);
             }
         }
     }
 
-    @Nullable
+
     @PostMapping(value = "/log-in")
-    public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, @Nullable BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
@@ -94,13 +95,13 @@ public class AuthController {
                 String jwtToken = authService.login(authRequestDTO);
                 return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
             } catch (AuthenticationException e) {
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, RESPONSE_UNAUTHORIZED);
             }
         }
     }
 
     @PostMapping(value = "/log-in-sso")
-    public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, @Nullable BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
@@ -111,7 +112,7 @@ public class AuthController {
                 String jwtToken = authService.loginSSO(ssoLoginRequestDTO);
                 return new ResponseEntity<>(new JwtResponseDTO(jwtToken), HttpStatus.OK);
             } catch (AuthenticationException e) {
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, RESPONSE_UNAUTHORIZED);
             }
         }
     }

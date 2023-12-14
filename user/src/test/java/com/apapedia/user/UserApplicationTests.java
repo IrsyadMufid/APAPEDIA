@@ -65,7 +65,7 @@ class UserApplicationTests {
         user1.setAddress("Dirumah");
         user1.setCreatedAt(new Date());
         user1.setUpdatedAt(new Date());
-        user1.setRole(RoleEnum.Customer);
+        user1.setRole(RoleEnum.CUSTOMER);
         user1.setDeleted(false);
 
         var user2 = new Seller("Official-Store");
@@ -77,7 +77,7 @@ class UserApplicationTests {
         user2.setAddress("Okee");
         user2.setCreatedAt(new Date());
         user2.setUpdatedAt(new Date());
-        user2.setRole(RoleEnum.Seller);
+        user2.setRole(RoleEnum.SELLER);
         user2.setDeleted(false);
 
         users.add(user1);
@@ -100,7 +100,7 @@ class UserApplicationTests {
 		user.setPassword("oke213");
 		user.setEmail("oke@gmail.com");
 		user.setAddress("ehehe");
-		user.setRole("Customer");
+		user.setRole("customer");
 
 		String result = authServiceImpl.register(user);
 		assertEquals("Customer created", result, "Should return Customer created");
