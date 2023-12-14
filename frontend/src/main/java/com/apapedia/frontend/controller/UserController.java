@@ -3,6 +3,7 @@ package com.apapedia.frontend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,17 @@ import com.apapedia.frontend.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import com.apapedia.frontend.dto.AuthDTO;
+import com.apapedia.frontend.dto.JwtDTO;
+
+import reactor.core.publisher.Mono;
 
 @Controller
 @RequestMapping("/user")
@@ -32,6 +44,18 @@ public class UserController {
         model.addAttribute("activeUserId", id);
         model.addAttribute("user", user);
         return "/user/profile";
+    }
+
+    private final WebClient webClient;
+
+    public UserController(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8081/").build();
+    }
+
+    @GetMapping("/login-tes")
+    public String showLoginForm(Model model) {
+        model.addAttribute("authRequestDTO", new AuthDTO());
+        return "login-page";
     }
 
     @GetMapping("/profile/edit/{id}")

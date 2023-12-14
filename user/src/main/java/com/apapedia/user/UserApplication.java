@@ -13,6 +13,7 @@ import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.RoleEnum;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.repository.UserDb;
+import com.apapedia.user.service.CustomerService;
 
 import jakarta.transaction.Transactional;
 
@@ -25,7 +26,7 @@ public class UserApplication {
 
 	@Bean
 	@Transactional
-	CommandLineRunner generateDummyUser(UserDb userDb, PasswordEncoder passwordEncoder) {
+	CommandLineRunner generateDummyUser(UserDb userDb, PasswordEncoder passwordEncoder, CustomerService customerService) {
 		return args -> {
 			var newUser0 = new Admin();
 			newUser0.setName("Moreno");
@@ -53,9 +54,9 @@ public class UserApplication {
 			newUser2.setRole(RoleEnum.CUSTOMER);
 			newUser2.setCartId(UUID.randomUUID());
 
-			userDb.save(newUser0);
-			userDb.save(newUser1);
-			userDb.save(newUser2);
+			// userDb.save(newUser0);
+			// userDb.save(newUser1);
+			// userDb.save(newUser2);
 		};
 	}
 }

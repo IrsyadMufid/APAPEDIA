@@ -26,5 +26,6 @@ public interface CatalogService {
     List<Catalog> findCatalogsBySellerId(UUID sellerId);
     List<Catalog> findCatalogsByPriceRange(Integer minPrice, Integer maxPrice);
     List<Catalog> findAllSorted(String sortBy, String sortOrder);
-    public byte[] processFile(MultipartFile file) throws IOException;
+    public byte[] processFile(MultipartFile file) throws IOException;    @Transactional
+    public void decreaseStock(UUID productId, Integer quantity);
 }

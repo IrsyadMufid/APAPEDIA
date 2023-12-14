@@ -56,7 +56,7 @@ public class UserModel {
     private String address;
 
     @CreationTimestamp
-    @Column(name="createdAt", nullable=false)
+    @Column(name="createdAt")
     private Date createdAt;
 
     @UpdateTimestamp

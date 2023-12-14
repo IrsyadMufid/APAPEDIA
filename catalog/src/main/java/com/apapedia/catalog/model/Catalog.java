@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.UUID;
+// import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Getter
@@ -40,6 +43,7 @@ public class Catalog {
     @Lob
     @Basic(fetch = FetchType.EAGER)
     @Column(name = "image")
+    @JsonIgnore
     private byte[] image;
 
     @Column(name = "is_deleted")
