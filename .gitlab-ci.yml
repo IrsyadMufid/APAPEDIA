@@ -160,7 +160,7 @@ build-frontend:
     - cat .env
   artifacts:
     paths:
-      - frontend/build/libs/frontend-0.0.1-SNAPSHOT.jar
+      - frontend/build/libs/tk_b_tha_24_frontend-0.0.1-SNAPSHOT.jar
       - frontend/.env
 
 build-image-frontend:
