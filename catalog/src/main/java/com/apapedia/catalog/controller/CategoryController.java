@@ -3,11 +3,8 @@ import com.apapedia.catalog.dto.ShowCategoryRequestDTO;
 import com.apapedia.catalog.mapper.CategoryMapper;
 import com.apapedia.catalog.model.Category;
 import com.apapedia.catalog.service.CategoryService;
-
 import jakarta.transaction.Transactional;
-
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,10 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private CategoryMapper categoryMapper;
 

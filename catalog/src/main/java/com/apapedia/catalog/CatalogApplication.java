@@ -1,20 +1,15 @@
 package com.apapedia.catalog;
-
 import com.apapedia.catalog.dto.CreateCatalogRequestDTO;
 import com.apapedia.catalog.mapper.CatalogMapper;
 import com.apapedia.catalog.model.Category;
 import com.apapedia.catalog.service.CatalogService;
 import com.apapedia.catalog.service.CategoryService;
 import com.github.javafaker.Faker;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-
-// No changes needed, the import statement is already correct
 import java.util.*;
 
 

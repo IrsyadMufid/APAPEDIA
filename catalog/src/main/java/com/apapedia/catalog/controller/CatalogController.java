@@ -6,16 +6,12 @@ import com.apapedia.catalog.dto.CatalogListResponseDTO;
 import com.apapedia.catalog.dto.CreateCatalogFormModel;
 import com.apapedia.catalog.mapper.CatalogMapper;
 import com.apapedia.catalog.model.Catalog;
-
 import com.apapedia.catalog.service.CatalogService;
 import com.apapedia.catalog.service.CategoryService;
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.validation.BindingResult;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import java.util.HashMap;
 
 @CrossOrigin
@@ -58,7 +52,6 @@ public class CatalogController {
             );
         } else {
             var catalog = catalogMapper.createCatalogFormModelToCatalog(catalogFormModel);
-    
             // Konversi categoryId ke objek Category
             var category = categoryService.getCategoryById(catalogFormModel.getCategoryId());
             catalog.setCategory(category);
@@ -68,19 +61,14 @@ public class CatalogController {
             try {
                 imageContent = catalogService.processFile(file);
             } catch (IOException e) {
-                throw new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file"
-                );
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error processing the file");
             }
             catalog.setImage(imageContent);
             catalog.setSellerId(catalogFormModel.getSellerId());
-    
             // Save the catalog entity
             catalogService.addCatalog(catalog);
-    
             // Set the success message
             var successMessage = "Product '" + catalogFormModel.getProductName() + "' created successfully.";
-    
             // Return the success message as JSON
             var response = new HashMap<String, String>();
             response.put("successMessage", successMessage);
@@ -88,7 +76,6 @@ public class CatalogController {
         }
     }
     
-
     @GetMapping("/all-catalogs")
     public List<ShowCatalogRequestDTO> getAllCatalogsSortedByName() {
         List<Catalog> catalogs = catalogService.findAllSortedByName();
@@ -113,7 +100,7 @@ public class CatalogController {
     }
 
     @PutMapping("/{id}")
-public ResponseEntity<String> updateCatalog(
+    public ResponseEntity<String> updateCatalog(
         @PathVariable UUID id,
         @ModelAttribute @Valid UpdateCatalogRequestDTO updateCatalogRequestDTO,
         @RequestParam(name = "file", required = false) MultipartFile file,
@@ -123,17 +110,14 @@ public ResponseEntity<String> updateCatalog(
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Request body has an invalid type or missing field");
     }
-
     // Convert categoryId to Long
     var categoryId = Long.parseLong(updateCatalogRequestDTO.getCategoryId());
-
     // Populate category based on categoryId
     var category = categoryService.getCategoryById(categoryId);
     if (category == null) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Invalid categoryId: " + updateCatalogRequestDTO.getCategoryId());
     }
-
     // Process the file and set the image content in the Catalog entity
     byte[] imageContent = null;
     if (file != null && !file.isEmpty()) {
@@ -154,10 +138,8 @@ public ResponseEntity<String> updateCatalog(
                     .body("Catalog not found for id: " + id);
         }
     }
-
     // Update the catalog entity
     catalogService.updateCatalog(id, updateCatalogRequestDTO, imageContent);
-
     // Return success message
     return ResponseEntity.ok("Product updated successfully");
 }
@@ -198,8 +180,4 @@ public ResponseEntity<String> updateCatalog(
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseDTOs);
     }
-   
 }
-    
-    
-    

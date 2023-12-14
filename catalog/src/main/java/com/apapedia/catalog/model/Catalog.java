@@ -1,14 +1,11 @@
 package com.apapedia.catalog.model;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +16,7 @@ public class Catalog {
     @Id
     @GeneratedValue
     private UUID id;
-
+    
     @Column(name = "seller_id")
     private UUID sellerId;
 
