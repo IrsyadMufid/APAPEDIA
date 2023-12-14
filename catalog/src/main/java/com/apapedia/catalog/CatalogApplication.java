@@ -44,42 +44,33 @@ public class CatalogApplication {
                 "Souvenir & Party Supplies"
                 // ... other predefined category names ...
             );
-
             // Check if categories need to be preloaded
             if (categoryService.getAllCategories().isEmpty()) {
                 predefinedCategoryNames.forEach(categoryName -> {
-                    Category category = new Category();
+                    var category = new Category();
                     category.setName(categoryName);
                     categoryService.addCategory(category);
                 });
             }
-
             // Now that categories are ensured to be preloaded, continue with creating fake catalog entries
-            Faker faker = new Faker();
-            Category category = categoryService.getAllCategories().get(faker.number().numberBetween(1, 13)); // example: get the first category
-
+            var faker = new Faker();
+            var category = categoryService.getAllCategories().get(faker.number().numberBetween(1, 13)); // example: get the first category
             // Create fake data for Catalog
-            CreateCatalogRequestDTO catalogDTO = new CreateCatalogRequestDTO();
+            var catalogDTO = new CreateCatalogRequestDTO();
             catalogDTO.setProductName(faker.commerce().productName());
             catalogDTO.setPrice(faker.number().numberBetween(100, 1000));
             catalogDTO.setProductDescription(faker.commerce().material());
             catalogDTO.setStock(faker.number().numberBetween(1, 100));
             catalogDTO.setCategory(category); // Set the fetched Category
-
             // Create a byte array to simulate file content
-            byte[] imageContent = new byte[20]; // Example image content
-            new java.util.Random().nextBytes(imageContent);
+            var imageContent = new byte[20]; // Example image content
+            new Random().nextBytes(imageContent);
             catalogDTO.setImage(imageContent);
-
             // Map DTO to Entity
             var catalog = catalogMapper.createCatalogRequestDTOToCatalog(catalogDTO);
             catalog.setImage(imageContent); // Directly set the byte array
-
             // Save the Catalog entity
             catalogService.addCatalog(catalog);
         };
     }
 }
-
-
-

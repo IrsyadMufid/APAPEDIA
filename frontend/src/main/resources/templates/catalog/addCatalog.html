@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:util="urn:java:com.apapedia.frontend.setting.Setting">
 <head>
     <meta charset="UTF-8">
     <!-- Menginclude file css dan js dari fragment common.html -->
@@ -21,7 +21,7 @@
         <div th:if="${successMessage}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
         </div>
-        <form id="addCatalogForm" action="http://localhost:8083/catalog/create-catalog" method="post" enctype="multipart/form-data" th:object="${createCatalogFormModel}" class="mt-4">
+        <form id="addCatalogForm" th:action="${createCatalogUrl}" method="post" enctype="multipart/form-data" th:object="${createCatalogFormModel}" class="mt-4">
             <input class="form-control" type="text" th:field="*{sellerId}" hidden/>
             <div class="form-group">
                 <label for="productName">Product Name:</label>

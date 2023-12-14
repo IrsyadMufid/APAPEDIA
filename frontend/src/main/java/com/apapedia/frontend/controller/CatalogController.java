@@ -70,7 +70,7 @@ public class CatalogController {
 
         // Define the URL with path variables
         String url = Setting.CLIENT_ORDER_SERVICE + "/order/selling-data/" + sellerId.toString();
-
+        
         // Set the path variable values
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("sellerId", sellerId.toString());
@@ -86,8 +86,9 @@ public class CatalogController {
 
         // Extract the response body
         List<ChartDataDTO> listResponse = responseEntity.getBody();
-
+        String catalogServiceUrl = Setting.CLIENT_CATALOG_SERVICE;
         // Add the list to the model
+        model.addAttribute("catalogServiceUrl", catalogServiceUrl);
         model.addAttribute("list", listResponse);
         model.addAttribute("activeUserId", sellerId);
         model.addAttribute("catalogs", catalogs);

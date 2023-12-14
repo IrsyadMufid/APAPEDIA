@@ -18,7 +18,7 @@
     <nav th:replace="~{fragments/navbar :: navbar (activeFragment='catalog')}"></nav>
     <div class="container mt-5">
         <h2>Update Catalog</h2>
-        <form id="updateCatalogForm" action="#" th:action="@{'http://localhost:8083/catalog/' + ${updateCatalogResponseDTO.id}}" method="post" enctype="multipart/form-data">
+        <form id="updateCatalogForm" action="#" th:action="@{${baseUrl} + '/' + ${updateCatalogResponseDTO.id}}" method="post" enctype="multipart/form-data">
             <input name="_method" type="hidden" value="PUT" />
             <input type="hidden" name="id" th:value="${updateCatalogResponseDTO.id}" />
             <input class="form-control" type="text" th:field="*{updateCatalogResponseDTO.sellerId}" hidden/>

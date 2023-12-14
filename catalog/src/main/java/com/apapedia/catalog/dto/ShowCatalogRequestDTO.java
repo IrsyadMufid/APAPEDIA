@@ -4,16 +4,12 @@ import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.util.Base64;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Getter
-@Setter
 public class ShowCatalogRequestDTO {
     private UUID id;
     private Integer price;

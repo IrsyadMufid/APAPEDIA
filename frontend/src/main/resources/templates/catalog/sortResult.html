@@ -98,34 +98,5 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    function softDeleteProduct(productId) {
-        try {
-            $.ajax({
-                url: 'http://localhost:8083/catalog/' + productId,
-                type: 'DELETE',
-                success: function(response) {
-                    console.log('Soft Delete Response:', response);
-                    // Reload the page or update the UI as needed
-                    window.location.reload();
-                },
-                error: function(error) {
-                    console.error('Soft Delete Error:', error);
-                    // Handle errors as needed
-                }
-            });
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-    /*]]>*/
-</script>
-
 </body>
 </html>

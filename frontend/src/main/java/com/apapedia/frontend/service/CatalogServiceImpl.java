@@ -25,6 +25,7 @@ import com.apapedia.frontend.dto.catalog.response.CatalogListResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.CatalogResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.DetailCatalogResponseDTO;
 import com.apapedia.frontend.dto.catalog.response.UpdateCatalogResponseDTO;
+import com.apapedia.frontend.setting.Setting;
 
 @Service
 public class CatalogServiceImpl implements CatalogService {
@@ -34,8 +35,8 @@ private RestTemplate restTemplate;
 
 
     
-    private final String baseUrl = "http://localhost:8083/catalog";
-    private final String categoriesUrl = "http://localhost:8083/category/all";
+    private final String baseUrl = Setting.CLIENT_CATALOG_SERVICE + "/catalog";
+    private final String categoriesUrl = Setting.CLIENT_CATALOG_SERVICE + "/category/all";
     private final String allCatalogsUrl = baseUrl + "/all-catalogs";
     private final String catalogsBySellerUrl = baseUrl + "/all-catalogs-by-seller-id?sellerId=";
     private final String searchUrl = baseUrl + "/by-name?productName=";
@@ -61,7 +62,9 @@ private RestTemplate restTemplate;
 
         CreateCatalogFormModel createCatalogFormModel = new CreateCatalogFormModel();
         createCatalogFormModel.setSellerId(activeUserId);
-
+        String catalogServiceUrl = Setting.CLIENT_CATALOG_SERVICE;
+        String createCatalogUrl = catalogServiceUrl + "/catalog/create-catalog";
+        model.addAttribute("createCatalogUrl", createCatalogUrl);
         model.addAttribute("createCatalogFormModel", createCatalogFormModel);
         model.addAttribute("activeUserId", activeUserId);
     }
@@ -132,6 +135,7 @@ private RestTemplate restTemplate;
         catalog.setSellerId(activeUserId);
         List<Map<String, Object>> categories = getAllCategories();
 
+        model.addAttribute("baseUrl", baseUrl);
         model.addAttribute("updateCatalogResponseDTO", catalog);
         model.addAttribute("categories", categories);
     }

@@ -105,16 +105,17 @@
             </div>
     </div>
 </div>
+
 <div style="width: 80%; margin: auto;">
     <canvas id="salesChart"></canvas>
 </div>
 
-<!-- Delete Proass="modal-content">
-            <dduct Modal -->
+<!-- Delete Product Modal -->
 <!-- Delete Product Modal -->
 <div th:each="catalog : ${catalogs}" th:id="'deleteProductModal' + ${catalog.id}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div cliv class="modal-header">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -138,7 +139,7 @@
     function softDeleteProduct(productId) {
         try {
             $.ajax({
-                url: 'http://localhost:8083/catalog/' + productId,
+                url: [[${catalogServiceUrl}]] + '/catalog/' + productId,
                 type: 'DELETE',
                 success: function(response) {
                     console.log('Soft Delete Response:', response);
@@ -157,46 +158,46 @@
 
     var serverData = [[${list}]];
   
-  var data = serverData.map(function (item, index) {
-      return {
-          x: 'Day ' + (index + 1),
-          y: item.quantitySold
-      };
-  });
-
-  var ctx = document.getElementById('salesChart').getContext('2d');
-  var salesChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          datasets: [{
-              label: 'Quantity Sold',
-              data: data,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 2,
-              fill: false
-          }]
-      },
-      options: {
-          scales: {
-              x: {
-                 type: 'category',
-                 scaleLabel: {
-                     display: true,
-                     labelString: 'Date'
-                 }
-              },
-              y: {
-                 beginAtZero: true,
-                 scaleLabel: {
-                     display: true,
-                     labelString: 'Quantity Sold'
-                 }
-              }
-          },
-          responsive: true,
-          maintainAspectRatio: false
-      }
-  });
+    var data = serverData.map(function (item, index) {
+        return {
+            x: 'Day ' + (index + 1),
+            y: item.quantitySold
+        };
+    });
+  
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Quantity Sold',
+                data: data,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                   type: 'category',
+                   scaleLabel: {
+                       display: true,
+                       labelString: 'Date'
+                   }
+                },
+                y: {
+                   beginAtZero: true,
+                   scaleLabel: {
+                       display: true,
+                       labelString: 'Quantity Sold'
+                   }
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
     /*]]>*/
 </script>
 

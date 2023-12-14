@@ -8,7 +8,8 @@
             "mainClass": "com.apapedia.frontend.FrontendApplication",
             "projectName": "frontend",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=50456 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=frontend"
         },
         {
             "type": "java",
@@ -18,7 +19,8 @@
             "mainClass": "com.apapedia.user.UserApplication",
             "projectName": "user",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=50470 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=user"
         },
         {
             "type": "java",
@@ -28,8 +30,18 @@
             "mainClass": "com.apapedia.catalog.CatalogApplication",
             "projectName": "catalog",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=50424 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=catalog"
         },
-
+        {
+            "type": "java",
+            "name": "Spring Boot-OrderApplication<order>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.apapedia.order.OrderApplication",
+            "projectName": "order",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
     ]
 }

@@ -3,7 +3,6 @@ package com.apapedia.catalog.service;
 import com.apapedia.catalog.dto.UpdateCatalogRequestDTO;
 import com.apapedia.catalog.mapper.CatalogMapper;
 import com.apapedia.catalog.model.Catalog;
-import com.apapedia.catalog.model.Category;
 import com.apapedia.catalog.repository.CatalogDb;
 
 import jakarta.transaction.Transactional;
@@ -50,34 +49,36 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public Catalog updateCatalog(UUID id, UpdateCatalogRequestDTO updateCatalogRequestDTO, byte[] imageContent) {
-        Catalog catalog = catalogDb.findById(id)
+        var catalog = catalogDb.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Catalog not found"));
-
+    
         // Fetch the existing Category from the database or create a new one if not found
-        Category existingCategory = categoryService.getOrCreateCategoryByName(updateCatalogRequestDTO.getCategoryId());
-
+        var existingCategory = categoryService.getOrCreateCategoryByName(updateCatalogRequestDTO.getCategoryId());
+    
         // Update Catalog entity with the existing Category
         catalog.setCategory(existingCategory);
-
+    
         // Mapping other data from DTO to Catalog
         catalog = catalogMapper.updateCatalogRequestDTOToCatalog(updateCatalogRequestDTO, catalog);
-
+    
         // Set the image content if provided
         if (imageContent != null) {
             catalog.setImage(imageContent);
         }
-
+    
         return catalogDb.save(catalog);
     }
+    
 
     @Override
     public void softDeleteCatalog(UUID id) {
-        Catalog catalog = catalogDb.findById(id).orElse(null);
+        var catalog = catalogDb.findById(id).orElse(null);
         if (catalog != null) {
             catalog.setIsDeleted(true);
             catalogDb.save(catalog);
         }
     }
+    
 
     @Override
     public List<Catalog> findCatalogsByProductName(String productName) {
@@ -96,9 +97,10 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<Catalog> findAllSorted(String sortBy, String sortOrder) {
-        Sort sort = Sort.by(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        var sort = Sort.by(sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
         return catalogDb.findAll(sort);
     }
+    
 
     @Override
     public byte[] processFile(MultipartFile file) throws IOException {

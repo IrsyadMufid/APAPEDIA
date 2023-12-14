@@ -18,7 +18,7 @@ import org.mapstruct.MappingTarget;
 public interface CatalogMapper {
 
     Catalog createCatalogFormModelToCatalog(CreateCatalogFormModel createCatalogFormModel);
-    Catalog createCatalogRequestDTOToCatalog(CreateCatalogRequestDTO CreateCatalogRequestDTO);
+    Catalog createCatalogRequestDTOToCatalog(CreateCatalogRequestDTO createCatalogRequestDTO);
 
     @Mapping(target = "category.id", source = "categoryId")
     Catalog updateCatalogRequestDTOToCatalog(UpdateCatalogRequestDTO updateCatalogRequestDTO, @MappingTarget Catalog catalog);
@@ -29,11 +29,11 @@ public interface CatalogMapper {
     ShowCatalogSellerDTO catalogToSellerCatalogResponseDTO(Catalog catalog);
     CatalogListResponseDTO catalogToCatalogListResponseDTO(Catalog catalog);
 
-    default byte[] map(MultipartFile file) {
+    default byte[] map(MultipartFile file) throws IOException {
         try {
             return file.getBytes();
         } catch (IOException e) {
-            throw new RuntimeException("Error reading file content", e);
+            throw new IOException("Error reading file content", e);
         }
     }
 
