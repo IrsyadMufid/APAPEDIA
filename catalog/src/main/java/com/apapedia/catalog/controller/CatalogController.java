@@ -10,6 +10,7 @@ import com.apapedia.catalog.dto.CreateCatalogRequestDTO;
 import com.apapedia.catalog.model.Catalog;
 import com.apapedia.catalog.service.CatalogService;
 import com.apapedia.catalog.service.CategoryService;
+import com.apapedia.catalog.repository.CatalogDb;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.UUID;
