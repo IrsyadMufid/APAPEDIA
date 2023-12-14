@@ -300,7 +300,7 @@ public class OrderService {
     private void reducecustomerBalance(Order order, String authToken) {
         UUID userId = order.getCustomer();
         long orderTotal = order.getTotalPrice(); 
-        String userUrl = "/api/customer/" + userId + "/subtract-balance/" + orderTotal;
+        String userUrl = "/api/user/subtract-balance/" + userId + "/" + orderTotal;
 
         try {
             webClientUser.put()
@@ -318,7 +318,7 @@ public class OrderService {
     private void increaseSellerBalance(Order order, String authToken) {
         UUID sellerId = order.getSeller(); 
         long orderTotal = order.getTotalPrice(); 
-        String sellerUrl = "/api/seller/" + sellerId + "/add-balance/" + orderTotal;
+        String sellerUrl = "/api/user/add-balance/" + sellerId + "/" + orderTotal;
     
         try {
             webClientUser.get()
