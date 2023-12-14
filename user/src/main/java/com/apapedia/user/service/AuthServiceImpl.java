@@ -83,7 +83,6 @@ public class AuthServiceImpl implements AuthService {
         UserModel user;
         if (authRequestDTO.getUsername().contains("@")) {
             user = userDb.findByEmail(authRequestDTO.getUsername());
-            username = user.getUsername();
         } else {
             username = authRequestDTO.getUsername();
             user = userDb.findByUsername(username);
@@ -92,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
             return "User not found";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        var encoder = new BCryptPasswordEncoder();
 
         if (encoder.matches(password, user.getPassword())) {
             return jwtGenerator.generateToken(user.getUsername(), user.getId(), user.getRole().toString());
@@ -110,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
         String username = ssoLoginRequestDTO.getUsername();
         String name = ssoLoginRequestDTO.getName();
 
-        Seller seller = sellerDb.findByUsername(username);
+        var seller = sellerDb.findByUsername(username);
 
         if (seller == null) {
             seller = new Seller();
@@ -131,7 +130,7 @@ public class AuthServiceImpl implements AuthService {
     public String loginErrorSSO(SSOLoginRequestDTO ssoLoginRequestDTO) {
         String username = ssoLoginRequestDTO.getUsername();
 
-        Seller seller = sellerDb.findByUsername(username);
+        var seller = sellerDb.findByUsername(username);
 
         if (seller == null) {
             return null;

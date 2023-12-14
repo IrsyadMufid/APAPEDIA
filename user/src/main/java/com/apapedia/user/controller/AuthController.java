@@ -33,7 +33,6 @@ import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.JwtGenerator;
 import com.apapedia.user.service.AuthService;
-
 import io.micrometer.common.lang.Nullable;
 import jakarta.validation.Valid;
 
@@ -55,21 +54,18 @@ public class AuthController {
     UserDb userDb;
 
     public static final String RESPONSE_INVALID = "Request body has invalid type or missing field";
-
     @PostMapping(value = "/sign-up")
     public ResponseEntity<String> addNewUser(@Valid @RequestBody CreateUserRequestDTO userDTO,
             BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
-        } else {
+        if (bindingResult.hasFieldErrors()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);} 
+        else {
             var user = authService.register(userDTO);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
 
-    @Nullable
     @PostMapping(value = "/log-in-sso-user")
-    public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> userLoginSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, @Nullable BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
@@ -87,7 +83,7 @@ public class AuthController {
 
     @Nullable
     @PostMapping(value = "/log-in")
-    public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> authenticate(@Valid @RequestBody AuthRequestDTO authRequestDTO, @Nullable BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {
@@ -103,9 +99,8 @@ public class AuthController {
         }
     }
 
-    @Nullable
     @PostMapping(value = "/log-in-sso")
-    public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<JwtResponseDTO> authenticateSSO(@Valid @RequestBody SSOLoginRequestDTO ssoLoginRequestDTO, @Nullable BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESPONSE_INVALID);
         } else {

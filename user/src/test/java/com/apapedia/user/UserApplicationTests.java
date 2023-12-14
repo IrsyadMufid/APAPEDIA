@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
@@ -88,13 +87,13 @@ class UserApplicationTests {
     }
 
     @Test
-    public void findAllUsersTest() {
+    void findAllUsersTest() {
         List<UserModel> retrievedUsers = userServiceImpl.findAllUser();
         assertEquals(2, retrievedUsers.size(), "Should return two users");
     }
 
 	@Test
-	public void registerTest() {
+	void registerTest() {
 		var user = new CreateUserRequestDTO();
 		user.setName("oke");
 		user.setUsername("oke");
