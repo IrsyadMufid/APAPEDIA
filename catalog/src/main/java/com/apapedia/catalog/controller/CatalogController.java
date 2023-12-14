@@ -77,12 +77,22 @@ public class CatalogController {
     }
     
     @GetMapping("/all-catalogs")
+    public List<ShowCatalogRequestDTO> getAllCatalogsSorted() {
+        List<Catalog> catalogs = catalogService.findAll();
+        return catalogs.stream()
+                .map(catalogMapper::catalogToCatalogResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/all-catalogs-sort")
     public List<ShowCatalogRequestDTO> getAllCatalogsSortedByName() {
         List<Catalog> catalogs = catalogService.findAllSortedByName();
         return catalogs.stream()
                 .map(catalogMapper::catalogToCatalogResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    
 
     @GetMapping("/all-catalogs-by-seller-id")
     public List<ShowCatalogSellerDTO> getAllCatalogsBySellerId(@RequestParam UUID sellerId) {

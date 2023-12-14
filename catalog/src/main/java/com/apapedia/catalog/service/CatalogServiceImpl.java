@@ -43,6 +43,11 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
+    public List<Catalog> findAll() {
+        return catalogDb.findAll();
+    }
+
+    @Override
     public Optional<Catalog> findCatalogById(UUID id) {
         return catalogDb.findById(id);
     }

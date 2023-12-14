@@ -17,6 +17,7 @@ import java.util.Optional;
 @Transactional
 public interface CatalogService {
     Catalog addCatalog(Catalog catalog);
+    public List<Catalog> findAll();
     List<Catalog> findAllSortedByName();
     public Optional<Catalog> findCatalogById(UUID id);
     Catalog updateCatalog(UUID id, UpdateCatalogRequestDTO updateCatalogRequestDTO, byte[] imageContent);
