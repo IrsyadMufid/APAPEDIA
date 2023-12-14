@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_apapedia/screens/catalog/CatalogPage.dart';
 import 'package:flutter_apapedia/screens/profile/profile_page.dart';
 import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/screens/login.dart';
@@ -73,6 +74,13 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.verified_user),
+              title: const Text('Catalog'),
+              onTap: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CatalogPage()));
+              },
+            ),
           ]);
         } else {
           // User is logged in
@@ -87,11 +95,21 @@ class CustomDrawer extends StatelessWidget {
           );
           drawerOptions.add(
             ListTile(
+              leading: const Icon(Icons.verified_user),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CatalogPage()));
+              },
+            ),
+          );
+          drawerOptions.add(
+            ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Logout'),
               onTap: () => _logout(context),
             ),
           );
+
         }
 
         return Drawer(

@@ -1,3 +1,4 @@
+import 'package:flutter_apapedia/screens/catalog/CatalogPage.dart';
 import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/screens/login.dart';
 import 'package:flutter_apapedia/screens/order/cart_items_page.dart';
