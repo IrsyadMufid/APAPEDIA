@@ -1,5 +1,6 @@
 import 'package:flutter_apapedia/screens/home.dart';
 import 'package:flutter_apapedia/screens/login.dart';
+import 'package:flutter_apapedia/screens/order/cart_items_page.dart';
 import 'package:flutter_apapedia/screens/register.dart';
 import 'package:flutter_apapedia/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginFormScreen(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(),
+        // '/cart': (context) => CartItemsList(orderService: orderService, catalogService: catalogService)
       },
     );
   }

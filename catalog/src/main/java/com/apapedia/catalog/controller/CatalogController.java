@@ -5,6 +5,8 @@ import com.apapedia.catalog.dto.UpdateCatalogRequestDTO;
 import com.apapedia.catalog.dto.CatalogListResponseDTO;
 import com.apapedia.catalog.dto.CreateCatalogFormModel;
 import com.apapedia.catalog.mapper.CatalogMapper;
+import com.apapedia.catalog.dto.CreateCatalogRequestDTO;
+// import com.apapedia.catalog.dto.CatalogMapper;
 import com.apapedia.catalog.model.Catalog;
 import com.apapedia.catalog.service.CatalogService;
 import com.apapedia.catalog.service.CategoryService;
@@ -91,6 +93,23 @@ public class CatalogController {
                 .map(catalogMapper::catalogToSellerCatalogResponseDTO)
                 .collect(Collectors.toList());
     }
+    @Autowired
+    private CatalogDb catalogDb;
+
+    @PostMapping("/create")
+    public Catalog addCatalog(@Valid @RequestBody CreateCatalogRequestDTO catalogDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+            );
+        } else {
+            // Assuming you have a MapStruct mapper instance called 'catalogMapper'
+            Catalog catalog = catalogMapper.createCatalogRequestDTOToCatalog(catalogDTO);
+            // Handle the image separately if it's not null and not empty
+            catalogService.addCatalog(catalog);
+            return catalog;
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ShowCatalogRequestDTO> getCatalogById(@PathVariable UUID id) {
@@ -98,7 +117,20 @@ public class CatalogController {
                 .map(catalog -> ResponseEntity.ok(catalogMapper.catalogToCatalogResponseDTO(catalog)))
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PostMapping("/decrease-stock/{productId}")
+    public ResponseEntity<String> decreaseStock(
+            @PathVariable("productId") UUID productId,
+            @RequestParam(name = "quantity") Integer quantity) {
+        catalogService.decreaseStock(productId, quantity);
+        return ResponseEntity.ok("Stock updated successfully");
+    }
 
+    @GetMapping("/item-seller/{sellerId}")
+    public List<Catalog> findItemBySeller(
+        @PathVariable("sellerId") UUID sellerId) {
+            return catalogDb.findBySellerId(sellerId);
+        }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCatalog(
         @PathVariable UUID id,
