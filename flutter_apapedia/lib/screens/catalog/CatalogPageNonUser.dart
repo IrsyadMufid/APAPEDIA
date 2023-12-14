@@ -8,14 +8,14 @@ import 'package:flutter_apapedia/screens/catalog/ProductDetailPage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class CatalogPage extends StatefulWidget {
-  const CatalogPage({super.key});
+class CatalogPageNonUser extends StatefulWidget {
+  const CatalogPageNonUser({super.key});
 
   @override
   _CatalogPageState createState() => _CatalogPageState();
 }
 
-class _CatalogPageState extends State<CatalogPage> {
+class _CatalogPageState extends State<CatalogPageNonUser> {
   late List<Product> products;
   late List<Product> filteredProducts;
 
