@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Comparator;
 
-// import org.apache.logging.log4j.util.PropertySource.Comparator;
-// import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -365,6 +363,4 @@ public class OrderService {
         return chartDataList;
      }
      
-
-
 }

@@ -125,4 +125,14 @@ public class CatalogServiceImpl implements CatalogService {
         String fileName = file.getOriginalFilename();
         return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
+
+    @Override
+    @Transactional
+    public void decreaseStock(UUID productId, Integer quantity) {
+        Catalog product = catalogDb.findById(productId).get();
+        int newStock = product.getStock() - quantity;
+
+        product.setStock(newStock);
+        catalogDb.save(product);
+    }
 }

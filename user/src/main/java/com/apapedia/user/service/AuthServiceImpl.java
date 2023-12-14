@@ -38,6 +38,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     JwtGenerator jwtGenerator;
 
+    @Autowired
+    CustomerService customerService;
+
     @Override
     public String register(CreateUserRequestDTO createUserDTO) {
         if (createUserDTO != null) {
