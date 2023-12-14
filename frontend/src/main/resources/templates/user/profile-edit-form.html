@@ -1,58 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
-    <title>Edit Profile - APAPEDIA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User - APAPEDIA</title>
+    <style>
+        .card {
+            background-color: #fff;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-sizing: border-box; /* Include padding in the width */
+        }
+        textarea {
+            height: 100px;
+            resize: vertical; /* Allow vertical resizing */
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #378dfc;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #378dfc;
+        }
+        .alert {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <nav th:replace="~{fragments/navbar :: navbar (activeFragment='profile')}"></nav>
-    <div class="container pt-5">
-        <div class="card mx-auto">
-          <h2 class="card-header pt-2 text-center">Edit Profile</h2>
-            <div class="card-body">
-              <div class="justify-content-center">
-                <div class="d-flex justify-content-center">
-                <shopicon-bold-account size="xl"></shopicon-bold-account>
-                </div>
-                <br>
-                <form th:action="@{/user/profile/edit/{id}(id=${user.id})}" th:object="${user}" method="POST">
-                    <input class="form-control" type="text" th:field="*{username}" hidden/>
-                    
-                    Name: <br>
-                    <input class="form-control" type="text" th:field="*{name}" />
-                    <br>
-
-                    Email: <br>
-                    <input class="form-control" type="text" th:field="*{email}" />
-                    <br>
-
-                    Address: <br>
-                    <input class="form-control" type="text" th:field="*{address}" />
-                    <br>
-
-                    Category: <br>
+    <div class="card">
+        <h2>Edit User</h2>
+        
+        <!-- User edit form -->
+        <form th:action="@{/user/profile/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" th:value="${user.name}" required />
+            </div>
+            <div class="form-group" hidden>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" th:value="${user.username}" hidden />
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" th:value="${user.email}" required />
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" required th:text="${user.address}"></textarea>
+            </div>
+            <div class="form-group">
+            Category: <br>
                     <select class="form-control" th:field="*{category}">
                     <option th:value="Official-Store">Official Store</option>
                     <option th:value="Biasa">Biasa</option>
                     </select>
-                    <br>
-
-                    <strong>APAPAY</strong> Balance: <br>
-                    <input required class="form-control" type="number" th:field="*{balance}" disabled />
-                    <br>
-                    
-                    <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a class="btn btn-secondary" th:href="@{/user/profile/{id}(id=${user.id})}">Back</a>
-                    </div>
-                </form>
-            </div>
-            </div>
-        </div>
-        <br>
+                </div>
+            <button type="submit">Update User</button>
+        </form>
     </div>
 </body>
 </html>

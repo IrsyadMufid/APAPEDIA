@@ -1,7 +1,5 @@
 package com.apapedia.user.service;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,10 +23,6 @@ public class CustomerService {
         this.webClient = webClientBuilder.baseUrl(Setting.CLIENT_ORDER_SERVICE).build();
     }
 
-    public Customer getCustomerById(UUID id){
-        return customerDb.findById(id).get();
-    }
-
     public Customer connectCart(Customer customer) {
         // Make a request to create a new cart
         String url = "/cart/create-cart/" + customer.getId();
@@ -37,9 +31,11 @@ public class CustomerService {
                 .retrieve()
                 .bodyToMono(CartResponse.class)
                 .block();
-                
-        customer.setCartId(cartResponse.getId());
-        customerDb.save(customer);
+
+        if (cartResponse != null) {
+            customer.setCartId(cartResponse.getId());
+            customerDb.save(customer);
+        }
 
         return customer;
     }

@@ -22,7 +22,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
-    @Deprecated
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {

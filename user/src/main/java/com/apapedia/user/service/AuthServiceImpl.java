@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
                 seller.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
                 seller.setEmail(createUserDTO.getEmail());
                 seller.setAddress(createUserDTO.getAddress());
-                seller.setRole(RoleEnum.Seller);
+                seller.setRole(RoleEnum.SELLER);
                 seller.setCategory(createUserDTO.getCategory());
                 sellerDb.save(seller);
                 return "Seller created";
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
                 customer.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
                 customer.setEmail(createUserDTO.getEmail());
                 customer.setAddress(createUserDTO.getAddress());
-                customer.setRole(RoleEnum.Customer);
+                customer.setRole(RoleEnum.CUSTOMER);
                 customerDb.save(customer);
                 return "Customer created";
             }
@@ -83,7 +83,6 @@ public class AuthServiceImpl implements AuthService {
         UserModel user;
         if (authRequestDTO.getUsername().contains("@")) {
             user = userDb.findByEmail(authRequestDTO.getUsername());
-            username = user.getUsername();
         } else {
             username = authRequestDTO.getUsername();
             user = userDb.findByUsername(username);
@@ -92,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
             return "User not found";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        var encoder = new BCryptPasswordEncoder();
 
         if (encoder.matches(password, user.getPassword())) {
             return jwtGenerator.generateToken(user.getUsername(), user.getId(), user.getRole().toString());
@@ -110,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
         String username = ssoLoginRequestDTO.getUsername();
         String name = ssoLoginRequestDTO.getName();
 
-        Seller seller = sellerDb.findByUsername(username);
+        var seller = sellerDb.findByUsername(username);
 
         if (seller == null) {
             seller = new Seller();
@@ -119,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
             seller.setUsername(username);
             seller.setEmail(username + "@ui.ac.id");
             seller.setAddress("Placeholder Alamat");
-            seller.setRole(RoleEnum.Seller);
+            seller.setRole(RoleEnum.SELLER);
             seller.setCategory("Official Store");
             sellerDb.save(seller);
         }
@@ -131,7 +130,7 @@ public class AuthServiceImpl implements AuthService {
     public String loginErrorSSO(SSOLoginRequestDTO ssoLoginRequestDTO) {
         String username = ssoLoginRequestDTO.getUsername();
 
-        Seller seller = sellerDb.findByUsername(username);
+        var seller = sellerDb.findByUsername(username);
 
         if (seller == null) {
             return null;

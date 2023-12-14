@@ -18,7 +18,7 @@ public class JwtGenerator {
 
     public static final String JWT_SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 18000;
 
     // Generate token
     public String generateToken(String username, UUID id, String role) {

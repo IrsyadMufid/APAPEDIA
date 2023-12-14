@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
@@ -66,7 +65,7 @@ class UserApplicationTests {
         user1.setAddress("Dirumah");
         user1.setCreatedAt(new Date());
         user1.setUpdatedAt(new Date());
-        user1.setRole(RoleEnum.Customer);
+        user1.setRole(RoleEnum.CUSTOMER);
         user1.setDeleted(false);
 
         var user2 = new Seller("Official-Store");
@@ -78,7 +77,7 @@ class UserApplicationTests {
         user2.setAddress("Okee");
         user2.setCreatedAt(new Date());
         user2.setUpdatedAt(new Date());
-        user2.setRole(RoleEnum.Seller);
+        user2.setRole(RoleEnum.SELLER);
         user2.setDeleted(false);
 
         users.add(user1);
@@ -88,20 +87,20 @@ class UserApplicationTests {
     }
 
     @Test
-    public void findAllUsersTest() {
+    void findAllUsersTest() {
         List<UserModel> retrievedUsers = userServiceImpl.findAllUser();
         assertEquals(2, retrievedUsers.size(), "Should return two users");
     }
 
 	@Test
-	public void registerTest() {
+	void registerTest() {
 		var user = new CreateUserRequestDTO();
 		user.setName("oke");
 		user.setUsername("oke");
 		user.setPassword("oke213");
 		user.setEmail("oke@gmail.com");
 		user.setAddress("ehehe");
-		user.setRole("Customer");
+		user.setRole("customer");
 
 		String result = authServiceImpl.register(user);
 		assertEquals("Customer created", result, "Should return Customer created");

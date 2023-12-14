@@ -15,22 +15,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
 
 import com.apapedia.frontend.dto.catalog.response.DetailCatalogResponseDTO;
-import com.apapedia.frontend.dto.catalog.response.UpdateCatalogResponseDTO;
 import com.apapedia.frontend.dto.order.ChartDataDTO;
 import com.apapedia.frontend.service.CatalogService;
 import com.apapedia.frontend.setting.Setting;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import com.apapedia.frontend.dto.catalog.request.CreateCatalogFormModel;
-
 
 @CrossOrigin
 @Controller
